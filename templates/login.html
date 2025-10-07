@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FlatOut Motorsports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background-color: #e8e8e8;
+            border-radius: 8px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            letter-spacing: 1px;
+        }
+
+        .logo .flat {
+            color: #000;
+        }
+
+        .logo .out {
+            color: #d1514c;
+        }
+
+        .logo .motorsports {
+            font-size: 14px;
+            color: #333;
+            letter-spacing: 3px;
+            margin-top: 5px;
+            font-weight: normal;
+        }
+
+        .login-form h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: normal;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #f8f9ff;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #d1514c;
+            background-color: #fff;
+        }
+
+        .form-input::placeholder {
+            color: #666;
+        }
+
+        .password-input {
+            font-family: monospace;
+            letter-spacing: 3px;
+        }
+
+        .sign-in-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #d1514c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .sign-in-btn:hover {
+            background-color: #b8453f;
+        }
+
+        .sign-in-btn:active {
+            background-color: #a03d37;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .forgot-password a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            color: #d1514c;
+            text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            
+            .logo h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>
+                <span class="flat">FLAT</span><span class="out">OUT</span>
+            </h1>
+            <div class="motorsports">MOTORSPORTS</div>
+        </div>
+        
+        <form class="login-form" action="/login/" method="post">
+            <h2>Sign In</h2>
+            
+            <div class="form-group">
+                <input 
+                    type="text" 
+                    name="username" 
+                    class="form-input" 
+                    placeholder="admin" 
+                    required
+                >
+            </div>
+            
+            <div class="form-group">
+                <input 
+                    type="password" 
+                    name="password" 
+                    class="form-input password-input" 
+                    placeholder="••••••" 
+                    required
+                >
+            </div>
+            
+            <button type="submit" class="sign-in-btn">Sign In</button>
+            
+            <div class="forgot-password">
+                <a href="/forgot-password/">Forgot your password?</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.querySelector('.login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            
+            if (username && password) {
+                // Here you would normally submit to your Django backend
+                alert('Login functionality would be handled by Django backend');
+                // window.location.href = '/dashboard/';
+            } else {
+                alert('Please fill in all fields');
+            }
+        });
+
+        // Focus effect for inputs
+        const inputs = document.querySelectorAll('.form-input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

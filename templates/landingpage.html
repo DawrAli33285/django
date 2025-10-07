@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    <style>
+        .link-button {
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+            color: white;
+            border: solid 1px #da7c0c;
+            background: #d1514c;
+            text-align: center;
+            text-decoration: none;
+            font: 14px/100% Arial, Helvetica, sans-serif;
+            padding: .5em 2em .55em;
+            text-shadow: 0 1px 1px rgba(0,0,0,.3);
+            -webkit-border-radius: .5em;
+            -moz-border-radius: .5em;
+            border-radius: .3em;
+            border-width: 10px;
+            border-color: black;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+            box-shadow: 0 1px 2px rgba(0,0,0,.2);
+            width: 150px;
+            margin: 10px 0; /* Added margin for spacing between buttons */
+        }
+        
+        .link-button:hover {
+            background: #f47c20;
+            background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015)); /* Fixed line break */
+            background: -moz-linear-gradient(top, #f88e11, #f06015);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015'); /* Fixed line break */
+        }
+        
+        .link-button:active {
+            position: relative;
+            top: 1px;
+        }
+
+        body {
+            background-color: black;
+            margin-top: 200px;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .button-container {
+            margin: 20px 0; /* Added spacing between button containers */
+        }
+    </style>
+</head>
+<body>
+    <!-- Your home page content here -->
+    <div class="text-center button-container">
+        <a class="link-button" href="/sales-portal/">Sales Portal</a>
+    </div>
+    
+    <div class="text-center button-container">
+        <a class="link-button" href="/ro-scheduler/">RO Scheduler</a>
+    </div>
+    
+    <div class="text-center button-container">
+        <a class="link-button" href="/part-shark-ops/">Part Shark Ops</a>
+    </div>
+    
+    <div class="text-center button-container">
+        <a class="link-button" href="/inventory/">Inventory Management</a>
+    </div>
+    
+    <div class="text-center button-container">
+        <a class="link-button" href="/key-tags/">Key Tags</a>
+    </div>
+</body>
+</html>

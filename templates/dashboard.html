@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FlatOut Motorsports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo .flat {
+            color: #fff;
+        }
+
+        .logo .out {
+            color: #d1514c;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logout-btn {
+            background-color: #d1514c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background-color: #b8453f;
+        }
+
+        /* Search and Filter Bar */
+        .search-bar {
+            background-color: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        .search-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: #333;
+        }
+
+        .unit-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Table Styles */
+        .inventory-table {
+            width: 100%;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 12px;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .vehicle-image {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .vehicle-details {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .status-available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .action-icons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .icon-btn {
+            padding: 4px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .icon-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+        .days-on-floor {
+            background-color: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            table {
+                font-size: 11px;
+            }
+            
+            th, td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <h1><span class="flat">FLAT</span><span class="out">OUT</span></h1>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="/" class="nav-item">Home</a>
+            <a href="/dashboard/" class="nav-item active">Major Units</a>
+            <a href="/sales/" class="nav-item">Sale Programs</a>
+            <a href="/accessories/" class="nav-item">Accessories</a>
+            <a href="/my-sales/" class="nav-item">My Sales</a>
+            <a href="/channels/" class="nav-item">Channels</a>
+        </nav>
+        
+        <div class="user-info">
+            <span>👤 admin</span>
+            <a href="/login/" class="logout-btn">Logout</a>
+        </div>
+    </header>
+
+    <!-- Search and Filter Bar -->
+    <div class="search-bar">
+        <input type="text" class="search-input" placeholder="Search inventory...">
+        <button class="search-btn">🔍</button>
+        <button class="clear-btn">Clear</button>
+        
+        <select class="filter-select">
+            <option>Mfg</option>
+            <option>Honda</option>
+            <option>Yamaha</option>
+            <option>Kawasaki</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Year</option>
+            <option>2023</option>
+            <option>2022</option>
+            <option>2021</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Model 1</option>
+            <option>ATV</option>
+            <option>UTV</option>
+            <option>Motorcycle</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Model 2</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Auto RV</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Store</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Map</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>New/Used</option>
+            <option>New</option>
+            <option>Used</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Floor Pt</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>1st</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Sale Pro</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Commits</option>
+        </select>
+        
+        <select class="filter-select">
+            <option>Ag</option>
+        </select>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Major Units</h1>
+                <div class="unit-count">Showing 559 Units</div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="/new-brochure/" class="btn btn-primary">New Brochure</a>
+                <a href="/bulk-edit/" class="btn btn-success">Bulk Edit</a>
+                <a href="/filter/" class="btn btn-danger">Filter</a>
+            </div>
+        </div>
+
+        <!-- Inventory Table -->
+        <div class="inventory-table">
+            <div class="table-header">
+                <div class="sort-options">
+                    <label>Sort:</label>
+                    <select>
+                        <option>Default</option>
+                        <option>Price Low to High</option>
+                        <option>Price High to Low</option>
+                        <option>Year</option>
+                    </select>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>☐</th>
+                        <th>Image/ Web Link</th>
+                        <th>Stock Number</th>
+                        <th>MFG</th>
+                        <th>Year</th>
+                        <th>Model Name</th>
+                        <th>Quote Level</th>
+                        <th>MSRP Retail</th>
+                        <th>Sale Price</th>
+                        <th>MAP</th>
+                        <th>Profit Margin</th>
+                        <th>Brochure</th>
+                        <th>New Edit Model</th>
+                        <th>Website Price URL</th>
+                        <th>Cycle Trader</th>
+                        <th>Location/ Store</th>
+                        <th>Program</th>
+                        <th>Days On Floor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>
+                            <div class="vehicle-details">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='0.3em' fill='%23999'%3EATV%3C/text%3E%3C/svg%3E" alt="Vehicle" class="vehicle-image">
+                            </div>
+                        </td>
+                        <td>BCX177</td>
+                        <td>🅰️</td>
+                        <td>2023</td>
+                        <td>215 IQ 460HP WAKE EDITION (AM215 433)</td>
+                        <td>1</td>
+                        <td class="price">$119,475.00</td>
+                        <td class="price">$99,999</td>
+                        <td class="price">$119,475</td>
+                        <td>$1,623</td>
+                        <td><button class="btn btn-primary btn-sm">Download</button></td>
+                        <td><button class="btn btn-success btn-sm">New Edit</button></td>
+                        <td>SC</td>
+                        <td></td>
+                        <td>SB</td>
+                        <td><span class="status-badge status-available">MY23 Scarab Boats...</span></td>
+                        <td><span class="days-on-floor">217</span></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>
+                            <div class="vehicle-details">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='0.3em' fill='%23999'%3EUTV%3C/text%3E%3C/svg%3E" alt="Vehicle" class="vehicle-image">
+                            </div>
+                        </td>
+                        <td>SBS-6904</td>
+                        <td>🔥</td>
+                        <td>2023</td>
+                        <td>230 CRZ LE 2.75 (ST-115HP) (29CRZ5E275)</td>
+                        <td>1</td>
+                        <td class="price">$53,299.00</td>
+                        <td class="price">$53,299</td>
+                        <td class="price">$53,902</td>
+                        <td>$1,300</td>
+                        <td><button class="btn btn-primary btn-sm">Download</button></td>
+                        <td><button class="btn btn-success btn-sm">New Edit</button></td>
+                        <td></td>
+                        <td></td>
+                        <td>SB</td>
+                        <td><span class="status-badge status-available">Southbay MY23 LE...</span></td>
+                        <td><span class="days-on-floor">110</span></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>
+                            <div class="vehicle-details">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='0.3em' fill='%23999'%3EBoat%3C/text%3E%3C/svg%3E" alt="Vehicle" class="vehicle-image">
+                            </div>
+                        </td>
+                        <td>SBS-6902</td>
+                        <td>🔥</td>
+                        <td>2023</td>
+                        <td>234 CR-R LE 2.75 (ST-150HP) (29CRZ5E275)</td>
+                        <td>1</td>
+                        <td class="price">$56,699.00</td>
+                        <td class="price">$56,699</td>
+                        <td class="price">$56,697</td>
+                        <td>$1,628</td>
+                        <td><button class="btn btn-primary btn-sm">Download</button></td>
+                        <td><button class="btn btn-success btn-sm">New Edit</button></td>
+                        <td></td>
+                        <td></td>
+                        <td>SB</td>
+                        <td><span class="status-badge status-available">Southbay MY23 LE...</span></td>
+                        <td><span class="days-on-floor">153</span></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>
+                            <div class="vehicle-details">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' text-anchor' dy='0.3em' fill='%23999'%3EBoat%3C/text%3E%3C/svg%3E" alt="Vehicle" class="vehicle-image">
+                            </div>
+                        </td>
+                        <td>SBS-6905</td>
+                        <td>🔥</td>
+                        <td>2023</td>
+                        <td>230 CRZ LE 2.75 (ST-150HP) (29CRZ5E275)</td>
+                        <td>1</td>
+                        <td class="price">$59,699.00</td>
+                        <td class="price">$59,699</td>
+                        <td class="price">$59,699</td>
+                        <td>$1,613</td>
+                        <td><button class="btn btn-primary btn-sm">Download</button></td>
+                        <td><button class="btn btn-success btn-sm">New Edit</button></td>
+                        <td></td>
+                        <td></td>
+                        <td>SB</td>
+                        <td><span class="status-badge status-available">Southbay MY23 LE...</span></td>
+                        <td><span class="days-on-floor">121</span></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>
+                            <div class="vehicle-details">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='0.3em' fill='%23999'%3EBoat%3C/text%3E%3C/svg%3E" alt="Vehicle" class="vehicle-image">
+                            </div>
+                        </td>
+                        <td>SBS-3982</td>
+                        <td>🔥</td>
+                        <td>2023</td>
+                        <td>230 RS LE 2.75 (ST-150HP) (23RS3E275)</td>
+                        <td>1</td>
+                        <td class="price">$59,999.00</td>
+                        <td class="price">$59,999</td>
+                        <td class="price">$59,999</td>
+                        <td>$1,675</td>
+                        <td><button class="btn btn-primary btn-sm">Download</button></td>
+                        <td><button class="btn btn-success btn-sm">New Edit</button></td>
+                        <td></td>
+                        <td></td>
+                        <td>SB</td>
+                        <td><span class="status-badge status-available">Southbay MY23 LE...</span></td>
+                        <td><span class="days-on-floor">145</span></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>
+                            <div class="vehicle-details">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='0.3em' fill='%23999'%3EBoat%3C/text%3E%3C/svg%3E" alt="Vehicle" class="vehicle-image">
+                            </div>
+                        </td>
+                        <td>SBS-3984</td>
+                        <td>🔥</td>
+                        <td>2023</td>
+                        <td>250 RS LE 2.75 (ST-150HP) (25RS3E275)</td>
+                        <td>1</td>
+                        <td class="price">$66,699.00</td>
+                        <td class="price">$66,699</td>
+                        <td class="price">$66,699</td>
+                        <td>$1,867</td>
+                        <td><button class="btn btn-primary btn-sm">Download</button></td>
+                        <td><button class="btn btn-success btn-sm">New Edit</button></td>
+                        <td></td>
+                        <td></td>
+                        <td>SB</td>
+                        <td><span class="status-badge status-available">Southbay MY23 LE...</span></td>
+                        <td><span class="days-on-floor">145</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        // Search functionality
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-input').value;
+            console.log('Searching for:', searchTerm);
+            // Add search logic here
+        });
+
+        // Clear filters
+        document.querySelector('.clear-btn').addEventListener('click', function() {
+            document.querySelector('.search-input').value = '';
+            const selects = document.querySelectorAll('.filter-select');
+            selects.forEach(select => select.selectedIndex = 0);
+        });
+
+        // Select all functionality
+        const selectAllCheckbox = document.querySelector('th input[type="checkbox"]');
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+                checkboxes.forEach(cb => cb.checked = this.checked);
+            });
+        }
+
+        // Add row hover effects
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f8f9fa';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '';
+            });
+        });
+    </script>
+</body>
+</html>
