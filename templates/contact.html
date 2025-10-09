@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts - Flat Out Motorsports</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+   <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .navbar {
+    padding: 0.5rem 1rem;
+    background-color: #343a40; /* Dark background */
+}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding-top: 70px;
+        }
+
+        .navbar {
+            background-color: #343a40;
+            color: white;
+            padding: 0.75rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            z-index: 1001;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 0.5rem 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            padding: 0.375rem 0.75rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
+
+        .container-fluid {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+        }
+
+        .table-controls {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .show-entries {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .show-entries select {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .filter-search {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-search input {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            min-width: 200px;
+        }
+
+        .table-container {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f8f9fa;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        th:hover {
+            background-color: #e9ecef;
+        }
+
+        th.sortable::after {
+            content: ' ⇅';
+            color: #adb5bd;
+            font-size: 0.8rem;
+        }
+
+        th.sorting-asc::after {
+            content: ' ▲';
+            color: #495057;
+        }
+
+        th.sorting-desc::after {
+            content: ' ▼';
+            color: #495057;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tbody tr:hover {
+            background-color: #e7f3ff;
+            cursor: pointer;
+        }
+
+        .table-footer {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0 0 8px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .table-info {
+            color: #495057;
+            font-size: 0.875rem;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            list-style: none;
+        }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+        .pagination a {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #dee2e6;
+            background-color: white;
+            color: #007bff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: block;
+        }
+
+        .pagination a:hover:not(.disabled) {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .pagination li.active a {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+            pointer-events: none;
+        }
+
+        .pagination li.disabled a {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #f8f9fa;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .container-fluid {
+                padding: 0 1rem;
+            }
+
+            .table-controls,
+            .table-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+    <style>
+        /* Custom navbar styles */
+        .navbar {
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-brand img {
+            height: 24px;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #fff;
+        }
+        
+        .navbar-dark .navbar-nav .active > .nav-link {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .dropdown-menu {
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .dropdown-item {
+            padding: 0.5rem 1.5rem;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .dropdown-divider {
+            margin: 0.5rem 0;
+        }
+        
+        .navbar-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .navbar-text .btn {
+            margin-left: 0.5rem;
+        }
+        
+        /* Adjust page content to account for fixed navbar */
+        body {
+            padding-top: 56px;
+        }
+        </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+        <a class="navbar-brand" href="/view-units">
+            <img style="height: 1.5rem;" src="https://newportal.flatoutmotorcycles.com/portal/content/images/fom-logo-inverse.png"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/view-units">Home</a>
+                </li>
+                
+                <!-- Major Units Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="majorUnitsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Major Units
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="majorUnitsDropdown">
+                        <a class="dropdown-item" href="/view-units/">Major Units</a>
+                        <a class="dropdown-item" href="/major-units-grid/">Major Units Grid</a>
+                        <a class="dropdown-item" href="/mu-missing/">MU Missing (50B)</a>
+                        <a class="dropdown-item" href="/cycle-trade-units/">CycleTrader Units</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/">MU Import</a>
+                        <a class="dropdown-item" href="/">CycleTrader Import</a>
+                        <a class="dropdown-item" href="/">Leads Import</a>
+                    </div>
+                </li>
+                
+                <!-- Sale Programs Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="saleProgramsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sale Programs
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="saleProgramsDropdown">
+                        <a class="dropdown-item" href="/sale-programs/">Sale Programs</a>
+                        <a class="dropdown-item" href="/coupons/">Coupons</a>
+                        
+                    </div>
+                </li>
+                
+                <!-- Accessories Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accessoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Accessories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="accessoriesDropdown">
+                        <a class="dropdown-item" href="/view-units/">Acc Packs</a>
+                        <a class="dropdown-item" href="/view-units/">PartImport</a>
+                    </div>
+                </li>
+                
+                <!-- My Sales Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="mySalesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My Sales
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="mySalesDropdown">
+                        <a class="dropdown-item" href="/">My Sales</a>
+                        <a class="dropdown-item" href="/quotes/">Quotes</a>
+                        <a class="dropdown-item" href="/contact/">Contacts</a>
+                        <a class="dropdown-item" href="/commission/">Commission</a>
+                        <a class="dropdown-item" href="/">Finance</a>
+                        <a class="dropdown-item" href="/">Sales Mgmt</a>
+                    </div>
+                </li>
+                
+                <!-- Channels Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="channelsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Channels
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="channelsDropdown">
+                        <a href="https://www.cycletrader.com/motorcycle-dealers/detail/flat%20out%20motorsports-704923?type=356953&dealerid=704923" target="_blank" class="dropdown-item">Cycle Trader Motorcycles</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=1049211046&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader Side by Side</a>
+                        <a href="https://www.pwctrader.com/pwc-dealers/detail/flat%20out%20motorsports-704923?type=9404794&dealerid=704923" target="_blank" class="dropdown-item">PWC Trader Personal Watercraft</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=528553&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader ATV Four Wheeler</a>
+                    </div>
+                </li>
+            </ul>
+            
+            <!-- User Info and Logout -->
+            <span class="navbar-text">
+                <i class="fa fa-user-circle" aria-hidden="true"></i> admin 
+                <a class="btn btn-danger btn-sm ml-2" href="/login/">Logout</a>
+            </span>
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <h2>Contacts</h2>
+        
+        <div class="table-controls">
+            <div class="show-entries">
+                <label>Show</label>
+                <select id="entriesPerPage" onchange="changeEntriesPerPage()">
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="-1">All</option>
+                </select>
+                <label>entries</label>
+            </div>
+            <div class="filter-search">
+                <label>Filter:</label>
+                <input type="search" id="searchInput" placeholder="" oninput="filterTable()">
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="contactsTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" onclick="sortTable(0)">Full Name</th>
+                        <th class="sortable" onclick="sortTable(1)">Phone</th>
+                        <th class="sortable" onclick="sortTable(2)">Email</th>
+                        <th class="sortable sorting-asc" onclick="sortTable(3)">Type</th>
+                        <th class="sortable" onclick="sortTable(4)">Info</th>
+                        <th class="sortable" onclick="sortTable(5)">Date</th>
+                        <th class="sortable" onclick="sortTable(6)">Country</th>
+                        <th class="sortable" onclick="sortTable(7)">Region</th>
+                        <th class="sortable" onclick="sortTable(8)">City</th>
+                    </tr>
+                </thead>
+                <tbody id="contactsTableBody">
+                    <!-- Table rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-footer">
+            <div class="table-info" id="tableInfo">Showing 1 to 10 of 80 entries</div>
+            <ul class="pagination" id="pagination">
+                <!-- Pagination will be inserted here by JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const allContacts = [
+            { name: 'Gregory Bartlett', phone: '3174459274', email: 'greg@partshark.com', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 4:24:23 PM', country: '', region: '', city: '' },
+            { name: 'Gregory Bartlett', phone: '3174459274', email: 'greg@partshark.com', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 4:19:47 PM', country: '', region: '', city: '' },
+            { name: 'Gregory Bartlett', phone: '3174459274', email: 'greg@partshark.com', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 4:16:17 PM', country: '', region: '', city: '' },
+            { name: 'Gregory Bartlett', phone: '3174459274', email: 'greg@partshark.com', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 4:12:33 PM', country: '', region: '', city: '' },
+            { name: 'Gregory Bartlett', phone: '3174459274', email: 'greg@partshark.com', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 4:11:19 PM', country: '', region: '', city: '' },
+            { name: 'Greg Bartlett', phone: '3174459274', email: 'greg@partshark.com', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 4:06:57 PM', country: '', region: '', city: '' },
+            { name: 'Gregory Bartlett', phone: '3174459274', email: 'greg@partshark.com', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 3:51:58 PM', country: '', region: '', city: '' },
+            { name: ' ', phone: '', email: '', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 3:51:17 PM', country: '', region: '', city: '' },
+            { name: 'Gregory Bartlett', phone: '3174459274', email: 'greg@partshark.com', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 3:46:54 PM', country: '', region: '', city: '' },
+            { name: 'Gregory Bartlett', phone: '3174459274', email: 'greg@partshark.com', type: 'IQ', info: 'Stock: AC0059;Model: TRV 700 XT;Quoted Price: $10,949.53;Comments: ', date: '7/14/2014 3:44:14 PM', country: '', region: '', city: '' }
+        ];
+
+        // Generate more sample data to reach 80 entries
+        for (let i = 10; i < 80; i++) {
+            allContacts.push({
+                name: i % 3 === 0 ? 'John Smith' : i % 3 === 1 ? 'Sarah Johnson' : 'Mike Wilson',
+                phone: '317' + Math.floor(Math.random() * 10000000),
+                email: 'customer' + i + '@example.com',
+                type: 'IQ',
+                info: 'Stock: ' + (i % 2 === 0 ? 'AC0059' : 'BRP0008') + ';Model: ' + (i % 2 === 0 ? 'TRV 700 XT' : 'CMD 800') + ';Quoted Price: $' + (9000 + Math.floor(Math.random() * 3000)) + ';Comments: ',
+                date: '7/' + (14 + (i % 10)) + '/2014 ' + (i % 12 + 1) + ':' + (i % 60) + ':' + (i % 60) + ' PM',
+                country: i % 5 === 0 ? 'USA' : '',
+                region: i % 5 === 0 ? 'IN' : '',
+                city: i % 5 === 0 ? 'Indianapolis' : ''
+            });
+        }
+
+        let filteredContacts = [...allContacts];
+        let currentPage = 1;
+        let entriesPerPage = 10;
+        let currentSortColumn = 3;
+        let sortDirection = 'asc';
+
+        function renderTable() {
+            const tbody = document.getElementById('contactsTableBody');
+            tbody.innerHTML = '';
+            
+            const start = (currentPage - 1) * entriesPerPage;
+            const end = entriesPerPage === -1 ? filteredContacts.length : start + entriesPerPage;
+            const pageContacts = filteredContacts.slice(start, end);
+
+            pageContacts.forEach(contact => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${contact.name}</td>
+                    <td>${contact.phone}</td>
+                    <td>${contact.email}</td>
+                    <td><span class="type-badge">${contact.type}</span></td>
+                    <td>${contact.info}</td>
+                    <td>${contact.date}</td>
+                    <td>${contact.country}</td>
+                    <td>${contact.region}</td>
+                    <td>${contact.city}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            updateTableInfo();
+            renderPagination();
+        }
+
+        function updateTableInfo() {
+            const start = filteredContacts.length === 0 ? 0 : (currentPage - 1) * entriesPerPage + 1;
+            const end = entriesPerPage === -1 ? filteredContacts.length : Math.min(currentPage * entriesPerPage, filteredContacts.length);
+            document.getElementById('tableInfo').textContent = 
+                `Showing ${start} to ${end} of ${filteredContacts.length} entries${filteredContacts.length !== allContacts.length ? ' (filtered from ' + allContacts.length + ' total entries)' : ''}`;
+        }
+
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            const totalPages = entriesPerPage === -1 ? 1 : Math.ceil(filteredContacts.length / entriesPerPage);
+
+            // Previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = currentPage === 1 ? 'disabled' : '';
+            prevLi.innerHTML = `<a href="#" onclick="changePage(${currentPage - 1}); return false;">Previous</a>`;
+            pagination.appendChild(prevLi);
+
+            // Page numbers
+            const maxVisible = 7;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+            if (endPage - startPage < maxVisible - 1) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const li = document.createElement('li');
+                if (i === currentPage) {
+                    li.className = 'active';
+                }
+                li.innerHTML = `<a href="#" onclick="changePage(${i}); return false;">${i}</a>`;
+                pagination.appendChild(li);
+            }
+
+            if (endPage < totalPages) {
+                const ellipsisLi = document.createElement('li');
+                ellipsisLi.className = 'disabled';
+                ellipsisLi.innerHTML = '<a href="#">…</a>';
+                pagination.appendChild(ellipsisLi);
+
+                const lastLi = document.createElement('li');
+                lastLi.innerHTML = `<a href="#" onclick="changePage(${totalPages}); return false;">${totalPages}</a>`;
+                pagination.appendChild(lastLi);
+            }
+
+            // Next button
+            const nextLi = document.createElement('li');
+            nextLi.className = currentPage === totalPages || totalPages === 0 ? 'disabled' : '';
+            nextLi.innerHTML = `<a href="#" onclick="changePage(${currentPage + 1}); return false;">Next</a>`;
+            pagination.appendChild(nextLi);
+        }
+
+        function changePage(page) {
+            const totalPages = entriesPerPage === -1 ? 1 : Math.ceil(filteredContacts.length / entriesPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderTable();
+            }
+        }
+
+        function changeEntriesPerPage() {
+            entriesPerPage = parseInt(document.getElementById('entriesPerPage').value);
+            currentPage = 1;
+            renderTable();
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredContacts = [...allContacts];
+            } else {
+                filteredContacts = allContacts.filter(contact => {
+                    return Object.values(contact).some(value => 
+                        String(value).toLowerCase().includes(searchTerm)
+                    );
+                });
+            }
+            
+            currentPage = 1;
+            renderTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'phone', 'email', 'type', 'info', 'date', 'country', 'region', 'city'];
+            const column = columns[columnIndex];
+
+            // Toggle sort direction if clicking the same column
+            if (currentSortColumn === columnIndex) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortDirection = 'asc';
+                currentSortColumn = columnIndex;
+            }
+
+            // Update header classes
+            document.querySelectorAll('th.sortable').forEach((th, index) => {
+                th.classList.remove('sorting-asc', 'sorting-desc');
+                if (index === columnIndex) {
+                    th.classList.add(sortDirection === 'asc' ? 'sorting-asc' : 'sorting-desc');
+                }
+            });
+
+            // Sort the data
+            filteredContacts.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+
+                // Handle date sorting
+                if (column === 'date') {
+                    aVal = new Date(aVal);
+                    bVal = new Date(bVal);
+                }
+
+                if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logging out...');
+            }
+        }
+
+        // Initialize the table
+        renderTable();
+    </script>
+    <!-- Bootstrap JS (required for navbar toggle and dropdowns) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</body>
+</html>

@@ -120,3 +120,48 @@ def view_units(request):
     """View all major units"""
     units = MajorUnit.objects.all()
     return render(request, 'view_units.html', {'units': units})
+
+# New views for all pages
+def landing_page(request):
+    """Display landing page"""
+    return render(request, 'landingpage.html')
+
+def login_page(request):
+    """Display login page"""
+    return render(request, 'login.html')
+
+def dashboard(request):
+    """Display dashboard"""
+    return render(request, 'dashboard.html')
+
+def commission(request):
+    """Display commission page"""
+    return render(request, 'commission.html')
+
+def contact(request):
+    """Display contact page"""
+    return render(request, 'contact.html')
+
+def coupons(request):
+    """Display coupons page"""
+    return render(request, 'coupons.html')
+
+def cycle_trade_units(request):
+    """Display cycle trade units page"""
+    return render(request, 'cycletradeunits.html')
+
+def major_units_grid(request):
+    """Display major units grid page"""
+    return render(request, 'majorunitsgrid.html')
+
+def mu_missing(request):
+    """Display MU missing page"""
+    return render(request, 'mumissing.html')
+
+def quotes(request):
+    """Display quotes page"""
+    return render(request, 'quotes.html')
+
+def sale_programs(request):
+    """Display sale programs page"""
+    return render(request, 'saleprograms.html')

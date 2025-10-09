@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Major Units - Inventory Management</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .navbar {
+    padding: 0.5rem 1rem;
+    background-color: #343a40; /* Dark background */
+}
+           /* Custom navbar styles */
+           .navbar {
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-brand img {
+            height: 24px;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #fff;
+        }
+        
+        .navbar-dark .navbar-nav .active > .nav-link {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .dropdown-menu {
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .dropdown-item {
+            padding: 0.5rem 1.5rem;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .dropdown-divider {
+            margin: 0.5rem 0;
+        }
+        
+        .navbar-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .navbar-text .btn {
+            margin-left: 0.5rem;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            padding-top: 60px;
+            padding-bottom: 120px;
+        }
+
+        /* Navbar */
+      
+   
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .page-header {
+            margin-bottom: 20px;
+        }
+
+        .page-header h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .unit-count {
+            color: #dc3545;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #343a40;
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+            z-index: 999;
+        }
+
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .filter-controls select,
+        .filter-controls input {
+            background: #495057;
+            color: white;
+            border: 1px solid #666;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 140px;
+        }
+
+        .filter-controls input::placeholder {
+            color: #adb5bd;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        /* Grid */
+        .units-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* Card */
+        .unit-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #e9ecef;
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            min-height: 80px;
+        }
+
+        .card-title {
+            flex: 1;
+        }
+
+        .condition-year {
+            font-size: 11px;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .model-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin: 4px 0;
+            line-height: 1.3;
+        }
+
+        .model-code {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .badge {
+            background: #f8f9fa;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .card-details {
+            font-size: 12px;
+            color: #666;
+            padding: 8px 0;
+            border-top: 1px solid #e9ecef;
+            border-bottom: 1px solid #e9ecef;
+            margin: 8px 0;
+        }
+
+        .detail-line {
+            margin: 4px 0;
+        }
+
+        .card-pricing {
+            padding: 8px 0;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 0;
+        }
+
+        .price-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .price-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .margin-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .margin-value {
+            font-size: 12px;
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .card-action {
+            padding-top: 8px;
+        }
+
+        .btn-quote {
+            width: 100%;
+            padding: 10px;
+            background: white;
+            color: #dc3545;
+            border: 2px solid #dc3545;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-quote:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-sold {
+            width: 100%;
+            padding: 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Loading */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .units-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .filter-controls {
+                flex-direction: column;
+            }
+
+            .filter-controls select,
+            .filter-controls input,
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+   
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+        <a class="navbar-brand" href="/view-units">
+            <img style="height: 1.5rem;" src="https://newportal.flatoutmotorcycles.com/portal/content/images/fom-logo-inverse.png"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/view-units">Home</a>
+                </li>
+                
+                <!-- Major Units Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="majorUnitsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Major Units
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="majorUnitsDropdown">
+                        <a class="dropdown-item" href="/view-units/">Major Units</a>
+                        <a class="dropdown-item" href="/major-units-grid/">Major Units Grid</a>
+                        <a class="dropdown-item" href="/mu-missing/">MU Missing (50B)</a>
+                        <a class="dropdown-item" href="/cycle-trade-units/">CycleTrader Units</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/">MU Import</a>
+                        <a class="dropdown-item" href="/">CycleTrader Import</a>
+                        <a class="dropdown-item" href="/">Leads Import</a>
+                    </div>
+                </li>
+                
+                <!-- Sale Programs Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="saleProgramsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sale Programs
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="saleProgramsDropdown">
+                        <a class="dropdown-item" href="/sale-programs/">Sale Programs</a>
+                        <a class="dropdown-item" href="/coupons/">Coupons</a>
+                        
+                    </div>
+                </li>
+                
+                <!-- Accessories Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accessoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Accessories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="accessoriesDropdown">
+                        <a class="dropdown-item" href="/view-units/">Acc Packs</a>
+                        <a class="dropdown-item" href="/view-units/">PartImport</a>
+                    </div>
+                </li>
+                
+                <!-- My Sales Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="mySalesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My Sales
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="mySalesDropdown">
+                        <a class="dropdown-item" href="/">My Sales</a>
+                        <a class="dropdown-item" href="/quotes/">Quotes</a>
+                        <a class="dropdown-item" href="/contact/">Contacts</a>
+                        <a class="dropdown-item" href="/commission/">Commission</a>
+                        <a class="dropdown-item" href="/">Finance</a>
+                        <a class="dropdown-item" href="/">Sales Mgmt</a>
+                    </div>
+                </li>
+                
+                <!-- Channels Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="channelsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Channels
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="channelsDropdown">
+                        <a href="https://www.cycletrader.com/motorcycle-dealers/detail/flat%20out%20motorsports-704923?type=356953&dealerid=704923" target="_blank" class="dropdown-item">Cycle Trader Motorcycles</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=1049211046&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader Side by Side</a>
+                        <a href="https://www.pwctrader.com/pwc-dealers/detail/flat%20out%20motorsports-704923?type=9404794&dealerid=704923" target="_blank" class="dropdown-item">PWC Trader Personal Watercraft</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=528553&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader ATV Four Wheeler</a>
+                    </div>
+                </li>
+            </ul>
+            
+            <!-- User Info and Logout -->
+            <span class="navbar-text">
+                <i class="fa fa-user-circle" aria-hidden="true"></i> admin 
+                <a class="btn btn-danger btn-sm ml-2" href="/login/">Logout</a>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h3>
+                Major Units 
+                <small class="unit-count">Showing <span id="unitCount">34</span> Units</small>
+            </h3>
+        </div>
+
+        <!-- Units Grid -->
+        <div class="units-grid" id="unitsGrid">
+            <!-- Cards will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <nav class="filter-bar">
+        <div class="filter-controls">
+            <select id="filterYear">
+                <option value="">-Year</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+            </select>
+
+            <select id="filterMfg">
+                <option value="">-Mfg</option>
+                <option value="NewlyAdded">Newly Added</option>
+                <option value="KAWASAKI">KAWASAKI</option>
+                <option value="YAMAHA">YAMAHA</option>
+                <option value="SEA DOO">SEA DOO</option>
+                <option value="CAN-AM">CAN-AM</option>
+                <option value="SUZUKI">SUZUKI</option>
+                <option value="HARLEY DAVIDSON">HARLEY DAVIDSON</option>
+            </select>
+
+            <select id="filterModelType">
+                <option value="">-Model Type</option>
+                <option value="Street Bikes">Street Bikes</option>
+                <option value="Dirt Bikes">Dirt Bikes</option>
+                <option value="ATV">ATV</option>
+                <option value="Side x Side">Side x Side</option>
+                <option value="PWC">PWC</option>
+                <option value="Pontoons">Pontoons</option>
+            </select>
+
+            <input type="text" id="filterSearch" placeholder="Search">
+            
+            <button class="btn btn-primary" onclick="applyFilters()">Search</button>
+            <button class="btn btn-success" onclick="clearFilters()">Show All</button>
+        </div>
+    </nav>
+
+    <script>
+        // Sample data based on the provided HTML
+        const units = [
+            {
+                img: "https://cdnmedia.endeavorsuite.com/images/organizations/2f6fb18d-0219-47a3-8ba2-4a5123522365/inventory/13664191/imgi_6_ImageCache.jpg",
+                condition: "Used",
+                year: "2025",
+                make: "CAN-AM",
+                model: "RENEGADE 650 Xmr (EPA",
+                modelCode: "5TSB",
+                stock: "BRP00003U",
+                vin: "3JBMWAJ4XSJ000003",
+                price: "$13,849.00",
+                margin: "$5,239",
+                days: "0",
+                sold: false,
+                type: "ATV"
+            },
+            {
+                img: "https://cdnmedia.endeavorsuite.com/images/organizations/2f6fb18d-0219-47a3-8ba2-4a5123522365/inventory/13664133/I3b1bc734-68be-4e7e-9f81-840da578f2b5_120_0.jpg?v=1759859738251",
+                condition: "Used",
+                year: "2025",
+                make: "CAN-AM",
+                model: "RENEGADE 650 Xmr (EPA",
+                modelCode: "5TSB",
+                stock: "BRP00004U",
+                vin: "3JBMWAJ41SJ000004",
+                price: "$13,849.00",
+                margin: "$5,139",
+                days: "0",
+                sold: false,
+                type: "ATV"
+            },
+            {
+                img: "",
+                condition: "New",
+                year: "2026",
+                make: "CAN-AM",
+                model: "OUTLANDER 1000 XT MAX 2UP RED",
+                modelCode: "4TTC",
+                stock: "BRP00146",
+                vin: "3JB3PA748TJ000146",
+                price: "$17,898.00",
+                margin: "$4,011",
+                days: "0",
+                sold: true,
+                type: "ATV"
+            },
+            {
+                img: "https://cdnmedia.endeavorsuite.com/images/catalogs/23121/products/showdisplay/84633927-3828-499c-b097-86d6b2ef8335.jpg",
+                condition: "Used",
+                year: "2023",
+                make: "HARLEY DAVIDSON",
+                model: "SPORTSTER 1250 S",
+                modelCode: "RH1250S",
+                stock: "HD12971U",
+                vin: "1HD1ZC411PB312971",
+                price: "$11,999.00",
+                margin: "$5,009",
+                days: "-4",
+                sold: false,
+                type: "Street Bikes"
+            },
+            {
+                img: "https://cdnmedia.endeavorsuite.com/images/organizations/2f6fb18d-0219-47a3-8ba2-4a5123522365/inventory/13496423/MH4LXDA18TJP00738-001.jpg",
+                condition: "New",
+                year: "2026",
+                make: "KAWASAKI",
+                model: "KLX140R 30.7\" SH",
+                modelCode: "KLX140ATFNN",
+                stock: "K00738",
+                vin: "MH4LXDA18TJP00738",
+                price: "$4,898.00",
+                margin: "$1,088",
+                days: "0",
+                sold: false,
+                type: "Dirt Bikes"
+            },
+            {
+                img: "https://cdnmedia.endeavorsuite.com/images/organizations/2f6fb18d-0219-47a3-8ba2-4a5123522365/inventory/13664634/45RD-NeonYellow-SDB20613P-001.jpg",
+                condition: "New",
+                year: "2024",
+                make: "SEA DOO",
+                model: "SWITCH CRUISE 18 170HP",
+                modelCode: "44RE",
+                stock: "SDB00723P",
+                vin: "YDV00723G324",
+                price: "$38,998.00",
+                margin: "$20,533",
+                days: "0",
+                sold: false,
+                type: "Pontoons"
+            },
+            {
+                img: "https://cdnmedia.endeavorsuite.com/images/organizations/2f6fb18d-0219-47a3-8ba2-4a5123522365/inventory/13664395/SwitchCruiseYellowEdit2-001.jpg?v=1759863732215",
+                condition: "New",
+                year: "2023",
+                make: "SEA DOO",
+                model: "SWITCH CRUISE 21 170HP",
+                modelCode: "46PM",
+                stock: "SDB10955P",
+                vin: "YDV10955I223",
+                price: "$40,098.00",
+                margin: "$15,218",
+                days: "0",
+                sold: false,
+                type: "Pontoons"
+            },
+            {
+                img: "https://cdnmedia.endeavorsuite.com/images/organizations/2f6fb18d-0219-47a3-8ba2-4a5123522365/inventory/13637751/JS1GN7FA2T7100194-014.jpg",
+                condition: "New",
+                year: "2026",
+                make: "SUZUKI",
+                model: "GSX-R600",
+                modelCode: "GSX-R600M6",
+                stock: "S00194",
+                vin: "JS1GN7FA2T7100194",
+                price: "$13,398.00",
+                margin: "$2,329",
+                days: "-12",
+                sold: false,
+                type: "Street Bikes"
+            },
+            {
+                img: "https://cdnmedia.endeavorsuite.com/images/catalogs/24596/products/showdisplay/deb28751-22fd-4f3c-99d5-a5f60db0d023.jpg",
+                condition: "New",
+                year: "2026",
+                make: "YAMAHA",
+                model: "PW50",
+                modelCode: "PW50T2",
+                stock: "Y16894",
+                vin: "JYA3PT1E4TA016894",
+                price: "$3,098.00",
+                margin: "$1,254",
+                days: "0",
+                sold: false,
+                type: "Dirt Bikes"
+            }
+        ];
+
+        let filteredUnits = [...units];
+
+        function renderUnits(unitsToRender) {
+            const grid = document.getElementById('unitsGrid');
+            grid.innerHTML = '';
+
+            unitsToRender.forEach(unit => {
+                const card = document.createElement('div');
+                card.className = 'unit-card';
+                
+                const imgSrc = unit.img || 'https://via.placeholder.com/280x200?text=No+Image';
+                
+                card.innerHTML = `
+                    <img src="${imgSrc}" alt="${unit.model}" class="card-image" onerror="this.src='https://via.placeholder.com/280x200?text=No+Image'">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <div class="condition-year">${unit.condition} ${unit.year}</div>
+                                <div class="model-name">${unit.make} ${unit.model}</div>
+                                <div class="model-code">${unit.modelCode}</div>
+                            </div>
+                            <div class="badge">${unit.days} days</div>
+                        </div>
+                        
+                        <div class="card-details">
+                            <div class="detail-line">Stock: ${unit.stock}</div>
+                            <div class="detail-line">Vin: ${unit.vin}</div>
+                        </div>
+                        
+                        <div class="card-pricing">
+                            <div class="price-row">
+                                <span class="price-label">Price:</span>
+                                <span class="price-value">${unit.price}</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="margin-label">Margin:</span>
+                                <span class="margin-value">${unit.margin}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-action">
+                            ${unit.sold 
+                                ? '<button class="btn-sold" disabled>SOLD</button>'
+                                : '<button class="btn-quote" onclick="quoteUnit(\'' + unit.stock + '\')">Quote Unit</button>'
+                            }
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+
+            document.getElementById('unitCount').textContent = unitsToRender.length;
+        }
+
+        function applyFilters() {
+            const year = document.getElementById('filterYear').value;
+            const mfg = document.getElementById('filterMfg').value;
+            const modelType = document.getElementById('filterModelType').value;
+            const search = document.getElementById('filterSearch').value.toLowerCase();
+
+            filteredUnits = units.filter(unit => {
+                const matchYear = !year || unit.year === year;
+                const matchMfg = !mfg || unit.make === mfg;
+                const matchType = !modelType || unit.type === modelType;
+                const matchSearch = !search || 
+                    unit.stock.toLowerCase().includes(search) ||
+                    unit.model.toLowerCase().includes(search) ||
+                    unit.make.toLowerCase().includes(search);
+
+                return matchYear && matchMfg && matchType && matchSearch;
+            });
+
+            renderUnits(filteredUnits);
+        }
+
+        function clearFilters() {
+            document.getElementById('filterYear').value = '';
+            document.getElementById('filterMfg').value = '';
+            document.getElementById('filterModelType').value = '';
+            document.getElementById('filterSearch').value = '';
+            
+            filteredUnits = [...units];
+            renderUnits(filteredUnits);
+        }
+
+        function quoteUnit(stock) {
+            alert(`Opening quote for unit: ${stock}`);
+        }
+
+        // Initialize
+        renderUnits(units);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

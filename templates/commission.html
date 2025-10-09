@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commission Programs - Flat Out Motorsports</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .nav-links {
+            background-color: white;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-links a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 0.5rem;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+        }
+
+        .filters {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filters select {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .bulk-actions {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .bulk-actions select {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .new-program-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background-color: #f8f9fa;
+        }
+
+        th {
+            padding: 0.75rem 0.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #E0E0E0;
+        }
+
+        tbody tr:hover {
+            background-color: #d4edda;
+        }
+
+        .tdMoney {
+            text-align: center;
+        }
+
+        .mfg-icon {
+            width: 28px;
+            height: 24px;
+        }
+
+        .action-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .modal-body {
+            margin-bottom: 1rem;
+        }
+
+        .modal-body input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 0.5rem 0.25rem;
+            }
+
+            .filters,
+            .bulk-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-links">
+        <a href="#">Major Units</a> | 
+        <a href="#">Contacts</a> | 
+        <a href="#">MUImport</a> | 
+        <a href="#">MU Orphans (50B)</a> | 
+        <a href="#">MU Missing (50B)</a> | 
+        <a href="#">Sale Programs</a> | 
+        <a href="#">Auto RV</a> | 
+        <a href="#">Quotes</a> | 
+        <a href="#">Sales</a> | 
+        <a href="#">Commission</a> | 
+        User: Roosevelt - <a href="#">Logout</a>
+    </div>
+
+    <h2>Index</h2>
+
+    <div class="filters">
+        <select id="filterMfg" onchange="applyFilters()">
+            <option value="--All">-Mfg</option>
+            <option value="BMW">BMW</option>
+            <option value="CAN-AM">CAN-AM</option>
+            <option value="CF MOTO">CF MOTO</option>
+            <option value="HARLEY DAVIDSON">HARLEY DAVIDSON</option>
+            <option value="HONDA">HONDA</option>
+            <option value="HUSQVARNA">HUSQVARNA</option>
+            <option value="INDIAN">INDIAN</option>
+            <option value="KAWASAKI">KAWASAKI</option>
+            <option value="KTM">KTM</option>
+            <option value="MOTO MORINI">MOTO MORINI</option>
+            <option value="QJMOTOR">QJMOTOR</option>
+            <option value="SEA DOO">SEA DOO</option>
+            <option value="SHORE HAVEN">SHORE HAVEN</option>
+            <option value="SKI DOO">SKI DOO</option>
+            <option value="SLINGSHOT">SLINGSHOT</option>
+            <option value="SOUTHBAY">SOUTHBAY</option>
+            <option value="SSR">SSR</option>
+            <option value="SUZUKI">SUZUKI</option>
+            <option value="Vanderhall">Vanderhall</option>
+            <option value="YACHT CLUB">YACHT CLUB</option>
+            <option value="YAMAHA">YAMAHA</option>
+        </select>
+
+        <select id="filterModelType" onchange="applyFilters()">
+            <option value="--All">-Model Type</option>
+            <option value="">None</option>
+            <option value="3 Wheel Motorcycle">3 Wheel Motorcycle</option>
+            <option value="ATV">ATV</option>
+            <option value="Cruiser/V-Twin">Cruiser/V-Twin</option>
+            <option value="Dirt Bikes">Dirt Bikes</option>
+            <option value="Outboard Motors">Outboard Motors</option>
+            <option value="Pontoon Trailers">Pontoon Trailers</option>
+            <option value="Pontoons">Pontoons</option>
+            <option value="PWC">PWC</option>
+            <option value="PWC Trailers">PWC Trailers</option>
+            <option value="Scooters">Scooters</option>
+            <option value="Side x Side">Side x Side</option>
+            <option value="Street Bikes">Street Bikes</option>
+        </select>
+    </div>
+
+    <div class="bulk-actions">
+        <select id="ddlBulkAction">
+            <option value="Bulk">Bulk</option>
+            <option value="BaseAmount">Base Amount</option>
+            <option value="StockedAmount">Stocked Amount</option>
+            <option value="FloorPlanAmount">Floor Plan Amount</option>
+            <option value="AccessorySoldAmount">Accessory Sold Amount</option>
+            <option value="DiscretionAmount">Discretion Amount</option>
+            <option value="DemoAmount">Demo Amount</option>
+        </select>
+        <button class="btn btn-primary" onclick="applyBulkAction()">Apply</button>
+    </div>
+
+    <a href="#" class="btn btn-success new-program-link">New Commission Program</a>
+
+    <div class="table-container">
+        <table id="cpIndexTable">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                    <th>Program Name</th>
+                    <th>Mfg</th>
+                    <th>Unit #</th>
+                    <th>Model Type</th>
+                    <th>Year</th>
+                    <th>DSRP Min</th>
+                    <th>Base $</th>
+                    <th>Stocked $</th>
+                    <th>Floorplan $</th>
+                    <th>Accessory $</th>
+                    <th>Demo $</th>
+                    <th>Dis %</th>
+                    <th>Date Created</th>
+                    <th>Date Modified</th>
+                    <th>Copy</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Table rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for bulk editing -->
+    <div id="bulkModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Bulk Update</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label id="modalLabel">Enter new amount:</label>
+                <input type="number" id="modalInput" step="0.01">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveBulkEdit()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const programs = [
+            { id: 1, name: 'Default New', mfg: 'Non', units: 528, modelType: '', year: '', dsrpMin: 1499, base: 100, stocked: 0, floorplan: 20, accessory: 20, demo: 0, discretion: 0, dateCreated: '12/1/2014', dateModified: '4/5/2016' },
+            { id: 2, name: 'Default Used - < $8,999', mfg: 'Non', units: 126, modelType: '', year: '', dsrpMin: 0, base: 50, stocked: 0, floorplan: 0, accessory: 0, demo: 0, discretion: 0, dateCreated: '12/1/2014', dateModified: '4/5/2016' },
+            { id: 5, name: 'BRP SxS 2014', mfg: 'CAN-AM', units: 0, modelType: 'Side x Side', year: '2014', dsrpMin: 4999, base: 100, stocked: 0, floorplan: 50, accessory: 50, demo: -50, discretion: 0, dateCreated: '12/2/2014', dateModified: '4/5/2016' },
+            { id: 6, name: 'BRP Spyder 2015', mfg: 'CAN-AM', units: 0, modelType: '3 Wheel Motorcycle', year: '2015', dsrpMin: 9999, base: 100, stocked: 0, floorplan: 0, accessory: 50, demo: 0, discretion: 0, dateCreated: '12/11/2014', dateModified: '4/5/2016' },
+            { id: 7, name: 'BRP ATV 2015', mfg: 'CAN-AM', units: 0, modelType: 'ATV', year: '2015', dsrpMin: 3999, base: 100, stocked: 0, floorplan: 50, accessory: 50, demo: -50, discretion: 10000, dateCreated: '12/11/2014', dateModified: '4/6/2016' },
+            { id: 8, name: 'BRP SxS 2015', mfg: 'CAN-AM', units: 0, modelType: 'Side x Side', year: '2015', dsrpMin: 4999, base: 100, stocked: 0, floorplan: 50, accessory: 50, demo: -50, discretion: 0, dateCreated: '12/11/2014', dateModified: '4/5/2016' },
+            { id: 9, name: 'BRP Sea-Doo 2016 (Spark)', mfg: 'SEA DOO', units: 0, modelType: 'PWC', year: '2016', dsrpMin: 4999, base: 100, stocked: 0, floorplan: 0, accessory: 20, demo: 0, discretion: 0, dateCreated: '12/11/2014', dateModified: '4/5/2016' },
+            { id: 10, name: 'BRP Sea-Doo 2014 (Spark)', mfg: 'SEA DOO', units: 0, modelType: 'PWC', year: '2014', dsrpMin: 4999, base: 100, stocked: 0, floorplan: 50, accessory: 20, demo: 0, discretion: 0, dateCreated: '12/11/2014', dateModified: '4/5/2016' },
+            { id: 12, name: 'Yamaha Street 2013', mfg: 'YAMAHA', units: 0, modelType: 'Street Bikes', year: '2013', dsrpMin: 4999, base: 100, stocked: 0, floorplan: 30, accessory: 20, demo: -50, discretion: 0, dateCreated: '1/10/2015', dateModified: '4/5/2016' },
+            { id: 13, name: 'Yamaha Street 2014', mfg: 'YAMAHA', units: 0, modelType: 'Street Bikes', year: '2014', dsrpMin: 4999, base: 100, stocked: 0, floorplan: 30, accessory: 20, demo: -50, discretion: 0, dateCreated: '1/10/2015', dateModified: '4/5/2016' },
+            { id: 14, name: 'Yamaha Street 2015', mfg: 'YAMAHA', units: 0, modelType: 'Street Bikes', year: '2015', dsrpMin: 4999, base: 100, stocked: 0, floorplan: 30, accessory: 20, demo: -50, discretion: 0, dateCreated: '1/10/2015', dateModified: '4/5/2016' },
+            { id: 25, name: 'Kawasaki Street 2013', mfg: 'KAWASAKI', units: 0, modelType: 'Street Bikes', year: '2013', dsrpMin: 9999, base: 100, stocked: 0, floorplan: 30, accessory: 25, demo: 0, discretion: 0, dateCreated: '1/10/2015', dateModified: '4/5/2016' },
+            { id: 26, name: 'Kawasaki Street 2014', mfg: 'KAWASAKI', units: 0, modelType: 'Street Bikes', year: '2014', dsrpMin: 3999, base: 100, stocked: 0, floorplan: 30, accessory: 25, demo: 0, discretion: 0, dateCreated: '1/10/2015', dateModified: '4/5/2016' },
+            { id: 27, name: 'Kawasaki Street 2015', mfg: 'KAWASAKI', units: 0, modelType: 'Street Bikes', year: '2015', dsrpMin: 3999, base: 100, stocked: 0, floorplan: 30, accessory: 25, demo: 0, discretion: 0, dateCreated: '1/10/2015', dateModified: '4/5/2016' }
+        ];
+
+        let filteredPrograms = [...programs];
+        let selectedIds = new Set();
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            filteredPrograms.forEach(program => {
+                const row = document.createElement('tr');
+                const mfgIcon = program.mfg === 'Non' ? 
+                    '<i class="fas fa-circle" style="color: #999;" title="Not MFG Set"></i>' :
+                    `<i class="fas fa-motorcycle" style="color: #007bff;" title="${program.mfg}"></i>`;
+
+                row.innerHTML = `
+                    <td><input type="checkbox" class="selectedId" value="${program.id}" ${selectedIds.has(program.id) ? 'checked' : ''} onchange="toggleSelection(${program.id})"></td>
+                    <td><a href="#" class="action-link">${program.name}</a></td>
+                    <td>${mfgIcon}</td>
+                    <td style="text-align: center;">${program.units}</td>
+                    <td>${program.modelType}</td>
+                    <td>${program.year}</td>
+                    <td class="tdMoney">$${program.dsrpMin.toLocaleString()}</td>
+                    <td class="tdMoney">$${program.base}</td>
+                    <td class="tdMoney">$${program.stocked}</td>
+                    <td class="tdMoney">$${program.floorplan}</td>
+                    <td class="tdMoney">$${program.accessory}</td>
+                    <td class="tdMoney">$${program.demo}</td>
+                    <td class="tdMoney">${program.discretion} %</td>
+                    <td style="text-align: center;">${program.dateCreated}</td>
+                    <td style="text-align: center;">${program.dateModified}</td>
+                    <td><a href="#" class="action-link" onclick="copyProgram(${program.id})">Copy</a></td>
+                    <td><a href="#" class="action-link" onclick="deleteProgram(${program.id}, '${program.name}')">Delete</a></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function applyFilters() {
+            const mfgFilter = document.getElementById('filterMfg').value;
+            const modelTypeFilter = document.getElementById('filterModelType').value;
+
+            filteredPrograms = programs.filter(program => {
+                const mfgMatch = mfgFilter === '--All' || program.mfg === mfgFilter;
+                const modelMatch = modelTypeFilter === '--All' || program.modelType === modelTypeFilter;
+                return mfgMatch && modelMatch;
+            });
+
+            renderTable();
+        }
+
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll').checked;
+            if (selectAll) {
+                filteredPrograms.forEach(p => selectedIds.add(p.id));
+            } else {
+                selectedIds.clear();
+            }
+            renderTable();
+        }
+
+        function toggleSelection(id) {
+            if (selectedIds.has(id)) {
+                selectedIds.delete(id);
+            } else {
+                selectedIds.add(id);
+            }
+            document.getElementById('selectAll').checked = selectedIds.size === filteredPrograms.length;
+        }
+
+        function applyBulkAction() {
+            if (selectedIds.size === 0) {
+                alert('Must select units');
+                return;
+            }
+
+            const action = document.getElementById('ddlBulkAction').value;
+            
+            if (action === 'Bulk') {
+                alert('Please select a specific action');
+                return;
+            }
+
+            const modal = document.getElementById('bulkModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalLabel = document.getElementById('modalLabel');
+            
+            modalTitle.textContent = `Bulk Update - ${action}`;
+            modalLabel.textContent = `Enter new ${action.replace('Amount', '')} amount:`;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('bulkModal').classList.remove('active');
+            document.getElementById('modalInput').value = '';
+        }
+
+        function saveBulkEdit() {
+            const value = parseFloat(document.getElementById('modalInput').value);
+            const action = document.getElementById('ddlBulkAction').value;
+            
+            if (isNaN(value)) {
+                alert('Please enter a valid number');
+                return;
+            }
+
+            const fieldMap = {
+                'BaseAmount': 'base',
+                'StockedAmount': 'stocked',
+                'FloorPlanAmount': 'floorplan',
+                'AccessorySoldAmount': 'accessory',
+                'DiscretionAmount': 'discretion',
+                'DemoAmount': 'demo'
+            };
+
+            const field = fieldMap[action];
+            
+            programs.forEach(program => {
+                if (selectedIds.has(program.id)) {
+                    program[field] = value;
+                }
+            });
+
+            closeModal();
+            renderTable();
+            alert(`Successfully updated ${selectedIds.size} programs`);
+        }
+
+        function copyProgram(id) {
+            const program = programs.find(p => p.id === id);
+            if (confirm(`Are you sure you want to COPY ${program.name}?`)) {
+                alert(`Copying program: ${program.name}`);
+            }
+        }
+
+        function deleteProgram(id, name) {
+            if (confirm(`Are you sure you want to DELETE ${name}?`)) {
+                const index = programs.findIndex(p => p.id === id);
+                if (index > -1) {
+                    programs.splice(index, 1);
+                    applyFilters();
+                    alert(`Deleted program: ${name}`);
+                }
+            }
+        }
+
+        // Initialize
+        renderTable();
+    </script>
+</body>
+</html>

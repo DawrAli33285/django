@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Units Missing from Website</title>
+     <!-- Bootstrap CSS -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css">
+    
+     <!-- Font Awesome -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #343a40;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar-user {
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .page-header {
+            margin-bottom: 10px;
+        }
+
+        .page-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        /* Table Controls */
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .entries-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .filter-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        select, input[type="search"] {
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input[type="search"] {
+            width: 200px;
+        }
+
+        /* Table */
+        .table-wrapper {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        th:hover {
+            background: #e9ecef;
+        }
+
+        th.sortable::after {
+            content: ' ⇅';
+            opacity: 0.3;
+            font-size: 12px;
+        }
+
+        th.sort-asc::after {
+            content: ' ▲';
+            opacity: 1;
+        }
+
+        th.sort-desc::after {
+            content: ' ▼';
+            opacity: 1;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #dee2e6;
+            transition: background-color 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background: #f0f0f0;
+        }
+
+        td {
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        /* Icons */
+        .icon-cell {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative;
+            cursor: help;
+        }
+
+        .icon-fom { background-color: #007bff; border-radius: 3px; }
+        .icon-new { background-color: #28a745; border-radius: 3px; }
+        .icon-used { background-color: #6c757d; border-radius: 3px; }
+        .icon-map { background-color: #ffc107; border-radius: 3px; }
+        .icon-mapfree { background-color: #17a2b8; border-radius: 3px; }
+
+        /* Pagination */
+        .pagination-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid #dee2e6;
+            margin-top: -1px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 5px;
+            list-style: none;
+        }
+
+        .page-btn {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #007bff;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: #e9ecef;
+        }
+
+        .page-btn:disabled {
+            color: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .page-btn.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        /* No results */
+        .no-results {
+            padding: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 1000px;
+            }
+
+            .pagination-wrapper {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+    <style>
+        /* Custom navbar styles */
+        .navbar {
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-brand img {
+            height: 24px;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #fff;
+        }
+        
+        .navbar-dark .navbar-nav .active > .nav-link {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .dropdown-menu {
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .dropdown-item {
+            padding: 0.5rem 1.5rem;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .dropdown-divider {
+            margin: 0.5rem 0;
+        }
+        
+        .navbar-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .navbar-text .btn {
+            margin-left: 0.5rem;
+        }
+        
+        /* Adjust page content to account for fixed navbar */
+        body {
+            padding-top: 56px;
+        }
+        </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+        <a class="navbar-brand" href="/view-units">
+            <img style="height: 1.5rem;" src="https://newportal.flatoutmotorcycles.com/portal/content/images/fom-logo-inverse.png"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/view-units">Home</a>
+                </li>
+                
+                <!-- Major Units Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="majorUnitsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Major Units
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="majorUnitsDropdown">
+                        <a class="dropdown-item" href="/view-units/">Major Units</a>
+                        <a class="dropdown-item" href="/major-units-grid/">Major Units Grid</a>
+                        <a class="dropdown-item" href="/mu-missing/">MU Missing (50B)</a>
+                        <a class="dropdown-item" href="/cycle-trade-units/">CycleTrader Units</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/">MU Import</a>
+                        <a class="dropdown-item" href="/">CycleTrader Import</a>
+                        <a class="dropdown-item" href="/">Leads Import</a>
+                    </div>
+                </li>
+                
+                <!-- Sale Programs Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="saleProgramsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sale Programs
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="saleProgramsDropdown">
+                        <a class="dropdown-item" href="/sale-programs/">Sale Programs</a>
+                        <a class="dropdown-item" href="/coupons/">Coupons</a>
+                        
+                    </div>
+                </li>
+                
+                <!-- Accessories Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accessoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Accessories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="accessoriesDropdown">
+                        <a class="dropdown-item" href="/view-units/">Acc Packs</a>
+                        <a class="dropdown-item" href="/view-units/">PartImport</a>
+                    </div>
+                </li>
+                
+                <!-- My Sales Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="mySalesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My Sales
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="mySalesDropdown">
+                        <a class="dropdown-item" href="/">My Sales</a>
+                        <a class="dropdown-item" href="/quotes/">Quotes</a>
+                        <a class="dropdown-item" href="/contact/">Contacts</a>
+                        <a class="dropdown-item" href="/commission/">Commission</a>
+                        <a class="dropdown-item" href="/">Finance</a>
+                        <a class="dropdown-item" href="/">Sales Mgmt</a>
+                    </div>
+                </li>
+                
+                <!-- Channels Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="channelsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Channels
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="channelsDropdown">
+                        <a href="https://www.cycletrader.com/motorcycle-dealers/detail/flat%20out%20motorsports-704923?type=356953&dealerid=704923" target="_blank" class="dropdown-item">Cycle Trader Motorcycles</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=1049211046&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader Side by Side</a>
+                        <a href="https://www.pwctrader.com/pwc-dealers/detail/flat%20out%20motorsports-704923?type=9404794&dealerid=704923" target="_blank" class="dropdown-item">PWC Trader Personal Watercraft</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=528553&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader ATV Four Wheeler</a>
+                    </div>
+                </li>
+            </ul>
+            
+            <!-- User Info and Logout -->
+            <span class="navbar-text">
+                <i class="fa fa-user-circle" aria-hidden="true"></i> admin 
+                <a class="btn btn-danger btn-sm ml-2" href="/login/">Logout</a>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h2>Units Missing from Website</h2>
+            <p>These units were imported but are not on the website</p>
+        </div>
+
+        <!-- Table Controls -->
+        <div class="table-controls">
+            <div class="entries-control">
+                <label>Show</label>
+                <select id="entriesPerPage" onchange="changeEntriesPerPage()">
+                    <option value="-1">All</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label>entries</label>
+            </div>
+
+            <div class="filter-control">
+                <label>Filter:</label>
+                <input type="search" id="searchInput" placeholder="" oninput="filterTable()">
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" onclick="sortTable(0)">Stock #</th>
+                        <th class="sortable sort-desc" onclick="sortTable(1)">Year</th>
+                        <th class="sortable" onclick="sortTable(2)">Model Name</th>
+                        <th>Icons</th>
+                        <th class="sortable" onclick="sortTable(4)">Invoice</th>
+                        <th class="sortable" onclick="sortTable(5)">MSRP</th>
+                        <th class="sortable" onclick="sortTable(6)">Color</th>
+                        <th class="sortable" onclick="sortTable(7)">VIN</th>
+                        <th class="sortable" onclick="sortTable(8)">LS Import</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-wrapper">
+            <div class="pagination-info" id="paginationInfo">Showing 1 to 10 of 102 entries</div>
+            <div class="pagination" id="paginationControls">
+                <!-- Pagination buttons will be generated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const data = [
+            { stock: "K-KLX300FTFNN-WT-1", year: 2026, model: "KLX300 (PRE-ORDER TODAY)", invoice: 5921.00, msrp: 5449.00, color: "BRIGHT WHITE", vin: "KLX300FTFNN-WT-01", import: "10/7/2025 6:19:43 PM", condition: "new", map: true },
+            { stock: "K-KX65CTFNN-01", year: 2026, model: "KX65 (PRE-ORDER TODAY)", invoice: 4344.00, msrp: 4249.00, color: "LIME GREEN", vin: "KX65CTFNN-0000001", import: "10/7/2025 6:19:43 PM", condition: "new", map: true },
+            { stock: "K-KLX140CTFNN-GR-1", year: 2026, model: "KLX140R F 33.9 IN SEAT HEIGHT", invoice: 4799.00, msrp: 4299.00, color: "LIME GREEN", vin: "KLX140CTFNN-GN-01", import: "10/7/2025 6:19:43 PM", condition: "new", map: true },
+            { stock: "SD36TD-1031887843", year: 2026, model: "GTR 230 AUDIO", invoice: 14415.00, msrp: 15699.00, color: "ECLIPSE BLACK / REEF BLUE", vin: "TBD36TD00001", import: "10/7/2025 6:19:43 PM", condition: "new", map: true },
+            { stock: "SD26TD-1031887813", year: 2026, model: "GTX LIMITED 325 TECH PACKAGE IDF", invoice: 20443.00, msrp: 22549.00, color: "TEAL BLUE METALLIC", vin: "TBD26TD00003", import: "10/7/2025 6:19:43 PM", condition: "new", map: true },
+            { stock: "K76470", year: 2026, model: "NINJA 500", invoice: 101.00, msrp: 5399.00, color: "METALLIC FLAT SPARK BLACK", vin: "ML5EXGH16TDA76470", import: "10/7/2025 6:19:43 PM", condition: "new", map: true },
+            { stock: "KG8923", year: 2026, model: "NINJA 650 NON-ABS", invoice: 7372.00, msrp: 7599.00, color: "METALLIC FLAT SPARK BLACK", vin: "ML5EXER11TDAG8923", import: "10/7/2025 6:19:45 PM", condition: "new", map: true },
+            { stock: "BRP00146", year: 2026, model: "OUTLANDER 1000 XT MAX 2UP RED", invoice: 13887.00, msrp: 16699.00, color: "WILDLAND CAMO", vin: "3JB3PA748TJ000146", import: "10/7/2025 6:19:45 PM", condition: "new", map: true },
+            { stock: "YA38543", year: 2025, model: "WC110", invoice: 1056.20, msrp: 1799.00, color: "BLACK", vin: "590211318S0038543", import: "10/7/2025 6:19:56 PM", condition: "new", map: false },
+            { stock: "BRP14389", year: 2025, model: "DEFENDER HD10 CAB MAX LONE STAR", invoice: 34686.16, msrp: 36699.00, color: "BLACK", vin: "3JBUUAX48SK014389", import: "10/7/2025 6:19:56 PM", condition: "new", map: true },
+            { stock: "K59416", year: 2025, model: "NINJA 500 KRT EDITION", invoice: 5370.00, msrp: 5499.00, color: "LIME GREEN", vin: "ML5EXGH15SDA59416", import: "10/7/2025 6:19:59 PM", condition: "new", map: false },
+            { stock: "SD00377U", year: 2025, model: "MXZ Xrs COMPETITION 8TR 137 1.25", invoice: 20179.00, msrp: 22499.00, color: "BLACK", vin: "2BPSUCSB5SV000377", import: "10/7/2025 6:20:04 PM", condition: "new", map: false },
+            { stock: "YA31631", year: 2024, model: "WCA112", invoice: 1205.79, msrp: 2299.00, color: "SILVER", vin: "590211514R0031631", import: "10/7/2025 6:19:48 PM", condition: "new", map: false },
+            { stock: "YA31630", year: 2024, model: "WCA112", invoice: 1205.79, msrp: 2299.00, color: "SILVER", vin: "590211512R0031630", import: "10/7/2025 6:19:48 PM", condition: "new", map: false },
+            { stock: "Y1400641", year: 2024, model: "EF6300iS", invoice: 2325.00, msrp: 5199.00, color: "BLUE", vin: "7CK1400641", import: "10/7/2025 6:19:48 PM", condition: "new", map: false },
+            { stock: "SDB11073T", year: 2024, model: "MOVE SWITCH 16 GALV", invoice: 3696.00, msrp: 4200.00, color: "SILVER", vin: "5KTBS191XRF217581", import: "10/7/2025 6:19:45 PM", condition: "new", map: false },
+            { stock: "Y3310275", year: 2024, model: "EF3000iS", invoice: 680.00, msrp: 2799.00, color: "GRAY", vin: "7CH-3310275", import: "10/7/2025 6:19:52 PM", condition: "new", map: false },
+            { stock: "YA24171", year: 2023, model: "PB2456T", invoice: 5368.00, msrp: 8500.00, color: "BLACK", vin: "590213024P0024171", import: "10/7/2025 6:19:45 PM", condition: "new", map: false },
+            { stock: "QJ98500U", year: 2023, model: "SRV550", invoice: 2563.57, msrp: 6099.00, color: "BLUE", vin: "LBBPHK157PBE98500", import: "10/7/2025 6:19:59 PM", condition: "used", map: false },
+            { stock: "QJ98470U", year: 2023, model: "SRV550", invoice: 2563.57, msrp: 6099.00, color: "BLUE", vin: "LBBPHK152PBE98470", import: "10/7/2025 6:19:59 PM", condition: "used", map: false },
+            { stock: "SSR11010U", year: 2023, model: "XF250X DUALSPORT", invoice: 1958.48, msrp: 2199.00, color: "WHITE", vin: "LAEGBZ467PGX11010", import: "10/7/2025 6:19:48 PM", condition: "used", map: false },
+            { stock: "SH17398", year: 2022, model: "SPB2249T-D", invoice: 3397.66, msrp: 4999.00, color: "BLACK", vin: "590212721N0017398", import: "10/7/2025 6:19:45 PM", condition: "new", map: true },
+            { stock: "YA72202", year: 2022, model: "PB2656T", invoice: 4601.89, msrp: 7999.00, color: "BLACK", vin: "4H1063229N0572202", import: "10/7/2025 6:19:45 PM", condition: "new", map: false },
+            { stock: "YA00834", year: 2022, model: "BX325TT-12", invoice: 6752.04, msrp: 7699.00, color: "BLACK", vin: "1HU1NA138N1000834", import: "10/7/2025 6:19:45 PM", condition: "new", map: false },
+            { stock: "SLG40224D", year: 2020, model: "R AUTODRIVE", invoice: 29271.00, msrp: 32699.00, color: "BLACK", vin: "57XAARHB6L8140224", import: "10/7/2025 6:19:48 PM", condition: "used", map: false },
+            { stock: "YA5824", year: 2018, model: "WC442", invoice: 3521.59, msrp: 5499.00, color: "BLACK", vin: "4H1002921J0525824", import: "10/7/2025 6:19:45 PM", condition: "new", map: false },
+            { stock: "SLG19968D", year: 2017, model: "S", invoice: 3404.17, msrp: 14999.00, color: "Q95", vin: "57XAASFA3H8119968", import: "10/7/2025 6:19:45 PM", condition: "used", map: false }
+        ];
+
+        let filteredData = [...data];
+        let currentPage = 1;
+        let entriesPerPage = -1;
+        let sortColumn = 1;
+        let sortDirection = 'desc';
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            const start = entriesPerPage === -1 ? 0 : (currentPage - 1) * entriesPerPage;
+            const end = entriesPerPage === -1 ? filteredData.length : start + entriesPerPage;
+            const pageData = filteredData.slice(start, end);
+
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="no-results">No matching records found</td></tr>';
+                return;
+            }
+
+            pageData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.stock}</td>
+                    <td>${row.year}</td>
+                    <td>${row.model}</td>
+                    <td>
+                        <div class="icon-cell">
+                            <span class="icon icon-fom" title="FOM Stock"></span>
+                            <span class="icon icon-${row.condition}" title="${row.condition === 'new' ? 'New Unit' : 'Used Unit'}"></span>
+                            ${row.map ? '<span class="icon icon-map" title="MAP Protected"></span>' : '<span class="icon icon-mapfree" title="MAP Free"></span>'}
+                        </div>
+                    </td>
+                    <td>$${row.invoice.toFixed(2)}</td>
+                    <td>$${row.msrp.toFixed(2)}</td>
+                    <td>${row.color}</td>
+                    <td>${row.vin}</td>
+                    <td>${row.import}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            updatePaginationInfo();
+            renderPagination();
+        }
+
+        function sortTable(columnIndex) {
+            const headers = document.querySelectorAll('th');
+            
+            if (sortColumn === columnIndex) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = columnIndex;
+                sortDirection = 'asc';
+            }
+
+            headers.forEach((th, idx) => {
+                th.classList.remove('sort-asc', 'sort-desc');
+                if (idx === columnIndex) {
+                    th.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                }
+            });
+
+            const keys = ['stock', 'year', 'model', '', 'invoice', 'msrp', 'color', 'vin', 'import'];
+            const key = keys[columnIndex];
+
+            filteredData.sort((a, b) => {
+                let aVal = a[key];
+                let bVal = b[key];
+
+                if (typeof aVal === 'string') {
+                    aVal = aVal.toLowerCase();
+                    bVal = bVal.toLowerCase();
+                }
+
+                if (sortDirection === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            filteredData = data.filter(row => {
+                return Object.values(row).some(val => 
+                    String(val).toLowerCase().includes(searchTerm)
+                );
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function changeEntriesPerPage() {
+            entriesPerPage = parseInt(document.getElementById('entriesPerPage').value);
+            currentPage = 1;
+            renderTable();
+        }
+
+        function updatePaginationInfo() {
+            const start = entriesPerPage === -1 ? 1 : (currentPage - 1) * entriesPerPage + 1;
+            const end = entriesPerPage === -1 ? filteredData.length : Math.min(start + entriesPerPage - 1, filteredData.length);
+            document.getElementById('paginationInfo').textContent = 
+                `Showing ${start} to ${end} of ${filteredData.length} entries`;
+        }
+
+        function renderPagination() {
+            const controls = document.getElementById('paginationControls');
+            controls.innerHTML = '';
+
+            if (entriesPerPage === -1) return;
+
+            const totalPages = Math.ceil(filteredData.length / entriesPerPage);
+
+            const prevBtn = document.createElement('button');
+            prevBtn.textContent = 'Previous';
+            prevBtn.className = 'page-btn';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => changePage(currentPage - 1);
+            controls.appendChild(prevBtn);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+                pageBtn.onclick = () => changePage(i);
+                controls.appendChild(pageBtn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Next';
+            nextBtn.className = 'page-btn';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => changePage(currentPage + 1);
+            controls.appendChild(nextBtn);
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderTable();
+        }
+
+        // Initialize
+        renderTable();
+    </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

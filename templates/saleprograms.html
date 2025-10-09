@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sale Programs - Flat Out Motorsports</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        body {
+            padding-top: 80px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        select, input {
+            padding: 7px;
+            border: solid 1px #ccc;
+            border-radius: 4px;
+            margin: 5px 0px 5px;
+        }
+
+        .colName {width: 325px;}
+        .colMfg {text-align:center;}
+        .colUnits {text-align:right; padding-right: 10px;}
+        .colNewUsed {text-align:center;}
+        .coldate {text-align:right; padding-left:10px; padding-right:10px;}
+        .colCopy {padding-left: 10px; padding-right: 10px;}
+        .colDelete {padding-left: 10px; padding-right: 10px;}
+        .colMoney {padding-left: 10px; padding-right: 10px; text-align: right;}
+
+        #spIndexTable tbody tr:nth-child(even) {background-color: #E0E0E0;}
+        #spIndexTable tbody tr:nth-child(odd) {}
+        
+        #spIndexTable {
+            width: 100%;
+            font-size: 0.9rem;
+        }
+        
+        #spIndexTable th {
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        #spIndexTable td {
+            padding: 8px;
+        }
+        
+        .well {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .ui-tabs {
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .ui-tabs-nav {
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .ui-tabs-nav li {
+            list-style: none;
+            display: inline-block;
+            margin: 0;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-right: 1px solid #dee2e6;
+        }
+        
+        .ui-tabs-nav li.ui-tabs-active {
+            background: white;
+            border-bottom: 2px solid #007bff;
+        }
+        
+        .ui-tabs-panel {
+            padding: 20px;
+        }
+        
+        .navbar-text {
+            color: rgba(255,255,255,.75) !important;
+        }
+        
+        img[src*="icons"] {
+            width: 28px;
+            height: 24px;
+        }
+    </style>
+    <style>
+/* Custom navbar styles */
+.navbar {
+    padding: 0.5rem 1rem;
+}
+
+.navbar-brand img {
+    height: 24px;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #fff;
+}
+
+.navbar-dark .navbar-nav .active > .nav-link {
+    color: #fff;
+    font-weight: bold;
+}
+
+.dropdown-menu {
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+.navbar {
+    padding: 0.5rem 1rem;
+    background-color: #343a40; /* Dark background */
+}
+.dropdown-item {
+    padding: 0.5rem 1.5rem;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-divider {
+    margin: 0.5rem 0;
+}
+
+.navbar-text {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar-text .btn {
+    margin-left: 0.5rem;
+}
+
+/* Adjust page content to account for fixed navbar */
+body {
+    padding-top: 56px;
+}
+</style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+        <a class="navbar-brand" href="/view-units">
+            <img style="height: 1.5rem;" src="https://newportal.flatoutmotorcycles.com/portal/content/images/fom-logo-inverse.png"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/view-units">Home</a>
+                </li>
+                
+                <!-- Major Units Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="majorUnitsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Major Units
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="majorUnitsDropdown">
+                        <a class="dropdown-item" href="/view-units/">Major Units</a>
+                        <a class="dropdown-item" href="/major-units-grid/">Major Units Grid</a>
+                        <a class="dropdown-item" href="/mu-missing/">MU Missing (50B)</a>
+                        <a class="dropdown-item" href="/cycle-trade-units/">CycleTrader Units</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/">MU Import</a>
+                        <a class="dropdown-item" href="/">CycleTrader Import</a>
+                        <a class="dropdown-item" href="/">Leads Import</a>
+                    </div>
+                </li>
+                
+                <!-- Sale Programs Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="saleProgramsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sale Programs
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="saleProgramsDropdown">
+                        <a class="dropdown-item" href="/sale-programs/">Sale Programs</a>
+                        <a class="dropdown-item" href="/coupons/">Coupons</a>
+                        
+                    </div>
+                </li>
+                
+                <!-- Accessories Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accessoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Accessories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="accessoriesDropdown">
+                        <a class="dropdown-item" href="/view-units/">Acc Packs</a>
+                        <a class="dropdown-item" href="/view-units/">PartImport</a>
+                    </div>
+                </li>
+                
+                <!-- My Sales Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="mySalesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My Sales
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="mySalesDropdown">
+                        <a class="dropdown-item" href="/">My Sales</a>
+                        <a class="dropdown-item" href="/quotes/">Quotes</a>
+                        <a class="dropdown-item" href="/contact/">Contacts</a>
+                        <a class="dropdown-item" href="/commission/">Commission</a>
+                        <a class="dropdown-item" href="/">Finance</a>
+                        <a class="dropdown-item" href="/">Sales Mgmt</a>
+                    </div>
+                </li>
+                
+                <!-- Channels Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="channelsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Channels
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="channelsDropdown">
+                        <a href="https://www.cycletrader.com/motorcycle-dealers/detail/flat%20out%20motorsports-704923?type=356953&dealerid=704923" target="_blank" class="dropdown-item">Cycle Trader Motorcycles</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=1049211046&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader Side by Side</a>
+                        <a href="https://www.pwctrader.com/pwc-dealers/detail/flat%20out%20motorsports-704923?type=9404794&dealerid=704923" target="_blank" class="dropdown-item">PWC Trader Personal Watercraft</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=528553&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader ATV Four Wheeler</a>
+                    </div>
+                </li>
+            </ul>
+            
+            <!-- User Info and Logout -->
+            <span class="navbar-text">
+                <i class="fa fa-user-circle" aria-hidden="true"></i> admin 
+                <a class="btn btn-danger btn-sm ml-2" href="/login/">Logout</a>
+            </span>
+        </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <h2>Sale Programs</h2>
+        <div class="well well-sm">
+            <div>
+                <select id="FilterMfg" name="FilterMfg">
+                    <option value="-">-</option>
+                    <option value="SOUTHBAY">SOUTHBAY</option>
+                    <option value="SEA DOO">SEA DOO</option>
+                    <option value="CAN-AM">CAN-AM</option>
+                    <option value="KAWASAKI">KAWASAKI</option>
+                    <option value="SUZUKI">SUZUKI</option>
+                    <option value="YAMAHA">YAMAHA</option>
+                    <option value="Vanderhall">Vanderhall</option>
+                    <option value="HARLEY DAVIDSON">HARLEY DAVIDSON</option>
+                    <option value="INDIAN">INDIAN</option>
+                    <option value="HONDA">HONDA</option>
+                    <option value="BMW">BMW</option>
+                    <option value="KTM">KTM</option>
+                </select>
+                <select name="ddlBulkAction" id="ddlBulkAction">
+                    <option value="Bulk">Bulk</option>
+                    <option value="ExpireDates">ExpireDates</option>
+                    <option value="PVLPEL">PVL\PEL</option>
+                </select>
+                <a href="#" class="myBtn btn btn-danger">Apply</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <button class="btn btn-default">
+            <a href="#">Create Sale Program</a>
+        </button>
+        <br><br>
+    </div>
+
+    <div class="container-fluid">
+        <div id="tabs" class="ui-tabs ui-corner-all ui-widget ui-widget-content">
+            <ul role="tablist" class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
+                <li role="tab" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab ui-tabs-active ui-state-active">
+                    <a href="#tabs-1">Current Programs (222)</a>
+                </li>
+                <li role="tab" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
+                    <a href="#tabs-2">Expired Programs (1)</a>
+                </li>
+            </ul>
+            
+            <div id="tabs-1" class="ui-tabs-panel ui-corner-bottom ui-widget-content">
+                <div style="overflow-x: auto;">
+                    <table id="spIndexTable">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" name="selectAllCurrent" id="selectAllCurrent" title="Select All Current"></th>
+                                <th class="colName">Prog Name</th>
+                                <th class="colMfg">Mfg</th>
+                                <th class="colUnits">Units</th>
+                                <th>Begin Date</th>
+                                <th>Expire Date</th>
+                                <th class="colNewUsed">New/Used</th>
+                                <th>Savings</th>
+                                <th>KickBack</th>
+                                <th>Created</th>
+                                <th>Modified</th>
+                                <th>Copy</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox" class="selectedId tabCurrent" value="25"></td>
+                                <td class="colName"><a href="#">DNV $899 Freight</a></td>
+                                <td class="colMfg">📦</td>
+                                <td class="colUnits"><a href="#">26</a></td>
+                                <td class="coldate">01/01/2024</td>
+                                <td class="coldate">01/01/2026</td>
+                                <td class="colNewUsed">New</td>
+                                <td class="colMoney">$0</td>
+                                <td class="colMoney">$0</td>
+                                <td class="coldate">07/08/2014</td>
+                                <td class="coldate">03/31/2025</td>
+                                <td class="colCopy"><a href="#" class="copier" data-val-saleprogramname="DNV $899 Freight">Copy</a></td>
+                                <td class="colDelete"><a href="#" class="deleter" data-val-saleprogramname="DNV $899 Freight">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="selectedId tabCurrent" value="26"></td>
+                                <td class="colName"><a href="#">Default Pre-Owned</a></td>
+                                <td class="colMfg">📦</td>
+                                <td class="colUnits"><a href="#">72</a></td>
+                                <td class="coldate">01/01/2023</td>
+                                <td class="coldate">01/01/2026</td>
+                                <td class="colNewUsed">Used</td>
+                                <td class="colMoney">$0</td>
+                                <td class="colMoney">$0</td>
+                                <td class="coldate">07/08/2014</td>
+                                <td class="coldate">09/18/2025</td>
+                                <td class="colCopy"><a href="#" class="copier" data-val-saleprogramname="Default Pre-Owned">Copy</a></td>
+                                <td class="colDelete"><a href="#" class="deleter" data-val-saleprogramname="Default Pre-Owned">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="selectedId tabCurrent" value="785"></td>
+                                <td class="colName"><a href="#">Yacht Club</a></td>
+                                <td class="colMfg">⛵</td>
+                                <td class="colUnits"><a href="#">51</a></td>
+                                <td class="coldate">08/01/2024</td>
+                                <td class="coldate">01/01/2026</td>
+                                <td class="colNewUsed">New</td>
+                                <td class="colMoney">$0</td>
+                                <td class="colMoney">$0</td>
+                                <td class="coldate">10/25/2019</td>
+                                <td class="coldate">03/31/2025</td>
+                                <td class="colCopy"><a href="#" class="copier" data-val-saleprogramname="Yacht Club">Copy</a></td>
+                                <td class="colDelete"><a href="#" class="deleter" data-val-saleprogramname="Yacht Club">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="selectedId tabCurrent" value="858"></td>
+                                <td class="colName"><a href="#">MY25 Maverick X3 Turbo (2 Seat)</a></td>
+                                <td class="colMfg">🏍️</td>
+                                <td class="colUnits"><a href="#">1</a></td>
+                                <td class="coldate">05/01/2025</td>
+                                <td class="coldate">11/01/2025</td>
+                                <td class="colNewUsed">New</td>
+                                <td class="colMoney">$3,000</td>
+                                <td class="colMoney">$3,000</td>
+                                <td class="coldate">09/18/2021</td>
+                                <td class="coldate">08/19/2025</td>
+                                <td class="colCopy"><a href="#" class="copier" data-val-saleprogramname="MY25 Maverick X3 Turbo">Copy</a></td>
+                                <td class="colDelete"><a href="#" class="deleter" data-val-saleprogramname="MY25 Maverick X3 Turbo">Delete</a></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="colUnits">653</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tabs-2" class="ui-tabs-panel ui-corner-bottom ui-widget-content" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" name="selectAllExpired" id="selectAllExpired"></th>
+                            <th class="colName">Sale Program Name</th>
+                            <th class="colMfg">Mfg</th>
+                            <th class="colUnits">Units</th>
+                            <th>Begin Date</th>
+                            <th>Expire Date</th>
+                            <th>New/Used</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" class="selectedId tabExpired" value="1243"></td>
+                            <td class="colName"><a href="#">Sea-Doo MY23 Sport 21 230HP Paint</a></td>
+                            <td class="colMfg">🚤</td>
+                            <td class="colUnits"><a href="#">1</a></td>
+                            <td class="coldate">02/23/2025</td>
+                            <td class="coldate">10/01/2025</td>
+                            <td class="colNewUsed">New</td>
+                            <td class="colDelete"><a href="#" class="deleter" data-val-saleprogramname="Sea-Doo MY23">Delete</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="iqdialog"></div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(function() {
+            // Initialize tabs
+            $("#tabs").tabs();
+
+            // Filter by manufacturer
+            $('#FilterMfg').on('change', function() {
+                const selectedMfg = $(this).val();
+                if (selectedMfg === '-') {
+                    $('#spIndexTable tbody tr').show();
+                } else {
+                    $('#spIndexTable tbody tr').hide();
+                    // In a real app, this would filter based on the manufacturer
+                    $('#spIndexTable tbody tr').show();
+                }
+            });
+
+            // Delete confirmation
+            $(".deleter").click(function(e) {
+                e.preventDefault();
+                const programName = $(this).attr('data-val-saleprogramname');
+                if (confirm("Are you sure you want to DELETE " + programName + "?")) {
+                    alert("Delete functionality would be implemented here");
+                }
+            });
+
+            // Copy confirmation
+            $(".copier").click(function(e) {
+                e.preventDefault();
+                const programName = $(this).attr('data-val-saleprogramname');
+                if (confirm("Are you sure you want to COPY " + programName + "?")) {
+                    alert("Copy functionality would be implemented here");
+                }
+            });
+
+            // Bulk action apply
+            $('.myBtn').on('click', function(event) {
+                event.preventDefault();
+                
+                const checkedItems = $(".selectedId:checked");
+                
+                if (checkedItems.length === 0) {
+                    alert("Must select at least one sale program");
+                    return;
+                }
+
+                if (checkedItems.length > 15) {
+                    alert("For safety reasons you can't bulk update more than 15 sales programs");
+                    return;
+                }
+
+                const action = $("#ddlBulkAction").val();
+                
+                if (action === "Bulk") {
+                    alert("Specify a bulk action to perform");
+                    return;
+                }
+
+                let ids = [];
+                checkedItems.each(function() {
+                    ids.push($(this).val());
+                });
+
+                alert("Bulk action '" + action + "' would be applied to: " + ids.join(", "));
+            });
+
+            // Select all current programs
+            $('#selectAllCurrent').on('click', function() {
+                $('.tabCurrent').prop('checked', $(this).is(":checked"));
+            });
+
+            // Select all expired programs
+            $('#selectAllExpired').on('click', function() {
+                $('.tabExpired').prop('checked', $(this).is(":checked"));
+            });
+        });
+    </script>
+</body>
+</html>

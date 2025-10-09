@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - FlatOut Motorsports</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
     <style>
         * {
             margin: 0;
@@ -15,72 +21,58 @@
             font-family: Arial, Helvetica, sans-serif;
             background-color: #f5f5f5;
             color: #333;
+            padding-top: 56px;
         }
 
-        /* Header Styles */
-        .header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* Navbar Styles */
+        .navbar {
+            background-color: #2c3e50 !important;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo h1 {
+        .navbar-brand {
+            color: white !important;
             font-size: 24px;
             font-weight: bold;
         }
 
-        .logo .flat {
+        .flat {
             color: #fff;
         }
 
-        .logo .out {
+        .out {
             color: #d1514c;
         }
 
-        .nav-menu {
-            display: flex;
-            align-items: center;
-            gap: 30px;
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
         }
 
-        .nav-item {
-            color: white;
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .nav-item:hover, .nav-item.active {
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #fff;
             background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logout-btn {
-            background-color: #d1514c;
-            color: white;
-            border: none;
-            padding: 6px 12px;
             border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
         }
 
-        .logout-btn:hover {
-            background-color: #b8453f;
+        .dropdown-menu {
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1.5rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .navbar-text .btn {
+            margin-left: 0.5rem;
         }
 
         /* Search and Filter Bar */
@@ -259,24 +251,6 @@
             color: #155724;
         }
 
-        .action-icons {
-            display: flex;
-            gap: 5px;
-        }
-
-        .icon-btn {
-            padding: 4px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        .icon-btn:hover {
-            background-color: #f8f9fa;
-        }
-
         .days-on-floor {
             background-color: #007bff;
             color: white;
@@ -288,10 +262,6 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-            }
-            
             .search-bar {
                 flex-direction: column;
                 align-items: stretch;
@@ -318,31 +288,103 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="logo">
-            <h1><span class="flat">FLAT</span><span class="out">OUT</span></h1>
+    <!-- Navbar -->
+     
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+        <a class="navbar-brand" href="/view-units">
+            <img style="height: 1.5rem;" src="https://newportal.flatoutmotorcycles.com/portal/content/images/fom-logo-inverse.png"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/view-units">Home</a>
+                </li>
+                
+                <!-- Major Units Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="majorUnitsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Major Units
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="majorUnitsDropdown">
+                        <a class="dropdown-item" href="/view-units/">Major Units</a>
+                        <a class="dropdown-item" href="/major-units-grid/">Major Units Grid</a>
+                        <a class="dropdown-item" href="/mu-missing/">MU Missing (50B)</a>
+                        <a class="dropdown-item" href="/cycle-trade-units/">CycleTrader Units</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/">MU Import</a>
+                        <a class="dropdown-item" href="/">CycleTrader Import</a>
+                        <a class="dropdown-item" href="/">Leads Import</a>
+                    </div>
+                </li>
+                
+                <!-- Sale Programs Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="saleProgramsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sale Programs
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="saleProgramsDropdown">
+                        <a class="dropdown-item" href="/sale-programs/">Sale Programs</a>
+                        <a class="dropdown-item" href="/coupons/">Coupons</a>
+                        
+                    </div>
+                </li>
+                
+                <!-- Accessories Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accessoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Accessories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="accessoriesDropdown">
+                        <a class="dropdown-item" href="/view-units/">Acc Packs</a>
+                        <a class="dropdown-item" href="/view-units/">PartImport</a>
+                    </div>
+                </li>
+                
+                <!-- My Sales Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="mySalesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My Sales
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="mySalesDropdown">
+                        <a class="dropdown-item" href="/">My Sales</a>
+                        <a class="dropdown-item" href="/quotes/">Quotes</a>
+                        <a class="dropdown-item" href="/contact/">Contacts</a>
+                        <a class="dropdown-item" href="/commission/">Commission</a>
+                        <a class="dropdown-item" href="/">Finance</a>
+                        <a class="dropdown-item" href="/">Sales Mgmt</a>
+                    </div>
+                </li>
+                
+                <!-- Channels Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="channelsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Channels
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="channelsDropdown">
+                        <a href="https://www.cycletrader.com/motorcycle-dealers/detail/flat%20out%20motorsports-704923?type=356953&dealerid=704923" target="_blank" class="dropdown-item">Cycle Trader Motorcycles</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=1049211046&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader Side by Side</a>
+                        <a href="https://www.pwctrader.com/pwc-dealers/detail/flat%20out%20motorsports-704923?type=9404794&dealerid=704923" target="_blank" class="dropdown-item">PWC Trader Personal Watercraft</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=528553&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader ATV Four Wheeler</a>
+                    </div>
+                </li>
+            </ul>
+            
+            <!-- User Info and Logout -->
+            <span class="navbar-text">
+                <i class="fa fa-user-circle" aria-hidden="true"></i> admin 
+                <a class="btn btn-danger btn-sm ml-2" href="/login/">Logout</a>
+            </span>
         </div>
-        
-        <nav class="nav-menu">
-            <a href="/" class="nav-item">Home</a>
-            <a href="/dashboard/" class="nav-item active">Major Units</a>
-            <a href="/sales/" class="nav-item">Sale Programs</a>
-            <a href="/accessories/" class="nav-item">Accessories</a>
-            <a href="/my-sales/" class="nav-item">My Sales</a>
-            <a href="/channels/" class="nav-item">Channels</a>
-        </nav>
-        
-        <div class="user-info">
-            <span>👤 admin</span>
-            <a href="/login/" class="logout-btn">Logout</a>
-        </div>
-    </header>
+    </nav>
 
     <!-- Search and Filter Bar -->
     <div class="search-bar">
         <input type="text" class="search-input" placeholder="Search inventory...">
-        <button class="search-btn">🔍</button>
+        <button class="search-btn">🔍 Search</button>
         <button class="clear-btn">Clear</button>
         
         <select class="filter-select">
@@ -441,7 +483,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>☐</th>
+                        <th><input type="checkbox"></th>
                         <th>Image/ Web Link</th>
                         <th>Stock Number</th>
                         <th>MFG</th>
@@ -538,7 +580,7 @@
                         <td><input type="checkbox"></td>
                         <td>
                             <div class="vehicle-details">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' text-anchor' dy='0.3em' fill='%23999'%3EBoat%3C/text%3E%3C/svg%3E" alt="Vehicle" class="vehicle-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='0.3em' fill='%23999'%3EBoat%3C/text%3E%3C/svg%3E" alt="Vehicle" class="vehicle-image">
                             </div>
                         </td>
                         <td>SBS-6905</td>
@@ -611,12 +653,15 @@
         </div>
     </main>
 
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         // Search functionality
         document.querySelector('.search-btn').addEventListener('click', function() {
             const searchTerm = document.querySelector('.search-input').value;
             console.log('Searching for:', searchTerm);
-            // Add search logic here
         });
 
         // Clear filters
@@ -634,18 +679,6 @@
                 checkboxes.forEach(cb => cb.checked = this.checked);
             });
         }
-
-        // Add row hover effects
-        const tableRows = document.querySelectorAll('tbody tr');
-        tableRows.forEach(row => {
-            row.addEventListener('mouseenter', function() {
-                this.style.backgroundColor = '#f8f9fa';
-            });
-            
-            row.addEventListener('mouseleave', function() {
-                this.style.backgroundColor = '';
-            });
-        });
     </script>
 </body>
 </html>

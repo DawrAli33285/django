@@ -14,8 +14,11 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'flatoutpim.com',
     'www.flatoutpim.com',
-    'dh_342qj3.dreamhostps.com'
+    'dh_342qj3.dreamhostps.com',
+    '127.0.0.1',
+    'localhost',
 ]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',

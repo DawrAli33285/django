@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupons - FOM Portal</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+    <style>
+        body {
+            padding-top: 80px;
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #343a40 !important;
+        }
+
+        #couponTable thead th {
+            padding: 25px 5px 10px;
+        }
+        
+        #couponTable thead tr {
+            border-bottom: 2px solid #e0e0e0;
+            font-size: 1.1em;
+            color: #2C74AD;
+        }
+        
+        #couponTable tbody tr:nth-child(even) {
+            background-color: #E0E0E0;
+        }
+        
+        #couponTable tbody tr td {
+            padding: 0px 4px 0px 4px;
+        }
+        
+        #couponTable tbody tr:hover {
+            background-color: #ffff99;
+        }
+
+        .iqordernote-trigger {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .iqordernote-trigger:hover {
+            text-decoration: underline;
+        }
+
+        .container-fluid {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+    </style>
+    <style>
+        /* Custom navbar styles */
+        .navbar {
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-brand img {
+            height: 24px;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #fff;
+        }
+        
+        .navbar-dark .navbar-nav .active > .nav-link {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .dropdown-menu {
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .dropdown-item {
+            padding: 0.5rem 1.5rem;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .dropdown-divider {
+            margin: 0.5rem 0;
+        }
+        
+        .navbar-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .navbar-text .btn {
+            margin-left: 0.5rem;
+        }
+        
+        /* Adjust page content to account for fixed navbar */
+        body {
+            padding-top: 56px;
+        }
+        </style>
+        
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+        <a class="navbar-brand" href="/view-units">
+            <img style="height: 1.5rem;" src="https://newportal.flatoutmotorcycles.com/portal/content/images/fom-logo-inverse.png"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/view-units">Home</a>
+                </li>
+                
+                <!-- Major Units Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="majorUnitsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Major Units
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="majorUnitsDropdown">
+                        <a class="dropdown-item" href="/view-units/">Major Units</a>
+                        <a class="dropdown-item" href="/major-units-grid/">Major Units Grid</a>
+                        <a class="dropdown-item" href="/mu-missing/">MU Missing (50B)</a>
+                        <a class="dropdown-item" href="/cycle-trade-units/">CycleTrader Units</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/">MU Import</a>
+                        <a class="dropdown-item" href="/">CycleTrader Import</a>
+                        <a class="dropdown-item" href="/">Leads Import</a>
+                    </div>
+                </li>
+                
+                <!-- Sale Programs Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="saleProgramsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sale Programs
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="saleProgramsDropdown">
+                        <a class="dropdown-item" href="/sale-programs/">Sale Programs</a>
+                        <a class="dropdown-item" href="/coupons/">Coupons</a>
+                        
+                    </div>
+                </li>
+                
+                <!-- Accessories Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accessoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Accessories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="accessoriesDropdown">
+                        <a class="dropdown-item" href="/view-units/">Acc Packs</a>
+                        <a class="dropdown-item" href="/view-units/">PartImport</a>
+                    </div>
+                </li>
+                
+                <!-- My Sales Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="mySalesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My Sales
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="mySalesDropdown">
+                        <a class="dropdown-item" href="/">My Sales</a>
+                        <a class="dropdown-item" href="/quotes/">Quotes</a>
+                        <a class="dropdown-item" href="/contact/">Contacts</a>
+                        <a class="dropdown-item" href="/commission/">Commission</a>
+                        <a class="dropdown-item" href="/">Finance</a>
+                        <a class="dropdown-item" href="/">Sales Mgmt</a>
+                    </div>
+                </li>
+                
+                <!-- Channels Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="channelsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Channels
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="channelsDropdown">
+                        <a href="https://www.cycletrader.com/motorcycle-dealers/detail/flat%20out%20motorsports-704923?type=356953&dealerid=704923" target="_blank" class="dropdown-item">Cycle Trader Motorcycles</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=1049211046&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader Side by Side</a>
+                        <a href="https://www.pwctrader.com/pwc-dealers/detail/flat%20out%20motorsports-704923?type=9404794&dealerid=704923" target="_blank" class="dropdown-item">PWC Trader Personal Watercraft</a>
+                        <a href="https://www.atvtrader.com/atv-dealers/detail/flat%20out%20motorsports-704923?type=528553&dealerid=704923" target="_blank" class="dropdown-item">ATV Trader ATV Four Wheeler</a>
+                    </div>
+                </li>
+            </ul>
+            
+            <!-- User Info and Logout -->
+            <span class="navbar-text">
+                <i class="fa fa-user-circle" aria-hidden="true"></i> admin 
+                <a class="btn btn-danger btn-sm ml-2" href="/login/">Logout</a>
+            </span>
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <a class="iqordernote-trigger" href="/Portal/Admin/CouponEdit?couponid=0">Add Coupon</a>
+
+        <table id="couponTable">
+            <thead>
+                <tr>
+                    <th>Coupon</th>
+                    <th>Ad</th>
+                    <th>Type</th>
+                    <th>Mfg</th>
+                    <th>Model Type</th>
+                    <th>Expires</th>
+                    <th>Ghosts</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>15% off P &amp; A Vehicle Purchase</td>
+                    <td>15% Off Accessories</td>
+                    <td>Discount</td>
+                    <td></td>
+                    <td></td>
+                    <td>12/31/2019</td>
+                    <td style="text-align: center;">0</td>
+                    <td><a class="iqordernote-trigger" href="/Portal/Admin/CouponEdit?couponid=3">Edit</a></td>
+                </tr>
+                <tr>
+                    <td>Free Rack</td>
+                    <td>Free Rack</td>
+                    <td>FreeGift</td>
+                    <td></td>
+                    <td>ATV</td>
+                    <td></td>
+                    <td style="text-align: center;">0</td>
+                    <td><a class="iqordernote-trigger" href="/Portal/Admin/CouponEdit?couponid=4">Edit</a></td>
+                </tr>
+                <tr>
+                    <td>Free Helmet</td>
+                    <td>Free Helmet</td>
+                    <td>FreeGift</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">0</td>
+                    <td><a class="iqordernote-trigger" href="/Portal/Admin/CouponEdit?couponid=5">Edit</a></td>
+                </tr>
+                <tr>
+                    <td>Gift Card</td>
+                    <td>$100 Gift Card</td>
+                    <td>InStoreCredit</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">0</td>
+                    <td><a class="iqordernote-trigger" href="/Portal/Admin/CouponEdit?couponid=6">Edit</a></td>
+                </tr>
+                <tr>
+                    <td>Free Battery Tender</td>
+                    <td>Free Battery Tender</td>
+                    <td>FreeGift</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">0</td>
+                    <td><a class="iqordernote-trigger" href="/Portal/Admin/CouponEdit?couponid=7">Edit</a></td>
+                </tr>
+                <tr>
+                    <td>Free Bike Stand</td>
+                    <td>Free Bike Stand</td>
+                    <td>FreeGift</td>
+                    <td></td>
+                    <td>Dirt Bikes</td>
+                    <td></td>
+                    <td style="text-align: center;">0</td>
+                    <td><a class="iqordernote-trigger" href="/Portal/Admin/CouponEdit?couponid=8">Edit</a></td>
+                </tr>
+                <tr>
+                    <td>Polaris Sportsman Winch</td>
+                    <td>Free Winch!</td>
+                    <td>FreeGift</td>
+                    <td>Polaris Industries</td>
+                    <td>ATV</td>
+                    <td>10/31/2019</td>
+                    <td style="text-align: center;">0</td>
+                    <td><a class="iqordernote-trigger" href="/Portal/Admin/CouponEdit?couponid=2">Edit</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="iqdialog"></div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        var lastclicked;
+
+        $('.iqordernote-trigger').on('click', function (e) {
+            e.preventDefault();
+            lastclicked = $(this);
+
+            iqOrderNoteTrigger($(this).attr('href'));
+        });
+
+        function iqOrderNoteTrigger(url) {
+            $("body").css("cursor", "progress");
+            xhr = $.get(url);
+            xhr.done(function (data) {
+                $("body").css("cursor", "default");
+
+                $('#iqdialog').css('max-height', '500px');
+                $('#iqdialog').html(data);
+                $('#iqdialog').dialog({ title: "Edit Coupon", width: "auto", modal: true });
+
+                var fform = $("#dialog form");
+
+                if (fform.data("unobtrusiveValidation")) {
+                    fform.unbind();
+                    fform.data("validator", null);
+                    $.validator.unobtrusive.parse(document);
+                    fform.validate(fform.data("unobtrusiveValidation").options);
+                }
+            });
+        }
+
+        function OrderNoteSuccess(e) {
+            if (e.Success) {
+                if (lastclicked) {
+                    $('#iqdialog').dialog('close');
+                    location.reload(true);
+                }
+            } else {
+                $('#validation-custom-error').show();
+                $('#validation-custom-error').text(e.ErrorMessage);
+            }
+            return false;
+        }
+    </script>
+</body>
+</html>
