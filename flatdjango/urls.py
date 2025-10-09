@@ -5,8 +5,11 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     
+    # Set login as the initial/root page
+    path('', views.login_page, name='login_page'),
+    
     # Existing routes
-    path('', views.upload_csv, name='upload_csv'),
+    path('upload-csv/', views.upload_csv, name='upload_csv'),
     path('process-csv/', views.process_csv, name='process_csv'),
     path('view-units/', views.view_units, name='view_units'),
     
