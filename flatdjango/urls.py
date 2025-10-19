@@ -25,4 +25,7 @@ urlpatterns = [
     path('mu-missing/', views.mu_missing, name='mu_missing'),
     path('quotes/', views.quotes, name='quotes'),
     path('sale-programs/', views.sale_programs, name='sale_programs'),
+     path('meuquote/', views.quote_view, name='quote'),
+     path('portalquote.html', views.portal_quote, name='portal_quote'),  # ← new route
+      path('Portal/Admin/SaleProgramEdit/<int:program_id>/', views.sale_program_edit, name='sale_program_edit'),
 ]

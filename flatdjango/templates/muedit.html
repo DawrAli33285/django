@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Major Unit</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .formee {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #tabs {
+            margin-top: 20px;
+        }
+
+        .ui-tabs .ui-tabs-nav {
+            background: #f8f9fa;
+            border: none;
+            border-bottom: 2px solid #dee2e6;
+            padding: 0;
+        }
+
+        .ui-tabs .ui-tabs-nav li {
+            border: none;
+            background: none;
+            margin: 0;
+        }
+
+        .ui-tabs .ui-tabs-nav li a {
+            padding: 12px 20px;
+            color: #495057;
+            text-decoration: none;
+        }
+
+        .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+            background: white;
+        }
+
+        .ui-tabs-panel {
+            padding: 20px;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table td, table th {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .boldy {
+            font-weight: bold;
+            color: #495057;
+            width: 150px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        label {
+            font-size: 14px;
+            color: #495057;
+            margin-right: 15px;
+        }
+
+        .iqTable {
+            margin-top: 20px;
+        }
+
+        .iqTable thead {
+            background: #f8f9fa;
+        }
+
+        .iqTable th {
+            font-weight: 600;
+            color: #495057;
+            padding: 12px 8px;
+        }
+
+        .iqTable td {
+            padding: 8px;
+        }
+
+        .mover {
+            cursor: move;
+            color: #6c757d;
+            font-size: 12px;
+        }
+
+        .deleteLink {
+            color: #dc3545;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .deleteLink:hover {
+            text-decoration: underline;
+        }
+
+        .boxer {
+            width: 100%;
+            padding: 6px 8px;
+        }
+
+        input[type="submit"] {
+            background: #28a745;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        input[type="submit"]:hover {
+            background: #218838;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #dee2e6;
+            margin: 20px 0;
+        }
+
+        #validation-custom-error {
+            display: none;
+        }
+
+        .linked-units-table {
+            width: 100%;
+        }
+
+        .linked-units-table img {
+            width: 70px;
+            height: 49px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .linked-units-table td {
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        .image-preview {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .image-preview img {
+            max-width: 200px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0 10px 0;
+            color: #333;
+        }
+
+        .form-inline {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .form-inline > div {
+            display: inline-block;
+        }
+
+        .ui-sortable-helper {
+            background: #fff;
+            opacity: 0.8;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <form action="/Portal/Admin/MUEdit/34858" class="formee formee-mini" id="MUEditForm" method="post">
+        <div id="validation-custom-error" style="border: 1px solid red; padding: 5px; display: none; color: Red;"></div>
+        
+        <div id="tabs">
+            <ul>
+                <li><a href="#tabs-1">Main</a></li>
+                <li><a href="#tabs-2">Commission</a></li>
+                <li><a href="#tabs-3">Acc. Packs</a></li>
+                <li><a href="#tabs-4">Linked Units</a></li>
+                <li><a href="#tabs-5">Images</a></li>
+            </ul>
+
+            <!-- Tab 1: Main -->
+            <div id="tabs-1">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="boldy">MFG</td>
+                            <td>Vanderhall</td>
+                            <td class="boldy">Stock #</td>
+                            <td>VH04511</td>
+                        </tr>
+                        <tr>
+                            <td class="boldy">Model Name</td>
+                            <td>CARMEL</td>
+                            <td class="boldy">$ Expire Date</td>
+                            <td>01/01/2026</td>
+                        </tr>
+                        <tr>
+                            <td class="boldy">LS</td>
+                            <td>C=10/18/2025&nbsp;M=10/18/2025</td>
+                            <td class="boldy">Year</td>
+                            <td>2023</td>
+                        </tr>
+                        <tr>
+                            <td class="boldy">Invoice</td>
+                            <td>40930.91</td>
+                            <td class="boldy">MSRP Unit</td>
+                            <td>43950.00</td>
+                        </tr>
+                        <tr>
+                            <td class="boldy">Model Code</td>
+                            <td>CARMEL</td>
+                            <td class="boldy">Freight</td>
+                            <td>0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="boldy">Color</td>
+                            <td>JEAN GREY</td>
+                            <td class="boldy"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="boldy">Profit</td>
+                            <td>4218.09</td>
+                            <td class="boldy">Sale Price</td>
+                            <td>45149.00</td>
+                        </tr>
+                        <tr>
+                            <td class="boldy">VIN</td>
+                            <td>7KGTC2C2XPR004511</td>
+                            <td class="boldy">UI mod</td>
+                            <td>10/18/2025 8:36:59 AM</td>
+                        </tr>
+                        <tr>
+                            <td class="boldy"><a target="_blank">B50 Link</a></td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <input type="hidden" id="MUId" name="MUId" value="34858">
+                <input type="hidden" id="Ghost" name="Ghost" value="False">
+                
+                <div style="margin: 15px 0;">
+                    <strong>MSRP Total:</strong>
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <label for="AutoRV">AutoRV</label>
+                    <input type="checkbox" id="AutoRV" name="AutoRV"> |
+                    
+                    <label for="YellowTag">Yellow Tag</label>
+                    <input type="checkbox" id="YellowTag" name="YellowTag"> |
+
+                    <label for="Mapped">MAP</label>
+                    <input type="checkbox" id="Mapped" name="Mapped" checked> |
+
+                    <select id="InvStatus" name="InvStatus" style="width: auto; display: inline-block;">
+                        <option value="0" selected>InStock</option>
+                        <option value="1">Sold</option>
+                        <option value="2">Pending</option>
+                    </select> |
+
+                    <label>Sale Program:</label>
+                    <select id="SaleProgramId" name="SaleProgramId" style="width: auto; display: inline-block;">
+                        <option value="25" selected>DNV $899 Freight</option>
+                        <option value="1291">Vanderhall Carmel</option>
+                        <option value="835">Vanderhall Carmel 2</option>
+                    </select>
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <label>Quote:</label>
+                    <select id="QuoteLevel" name="QuoteLevel" style="width: auto; display: inline-block;">
+                        <option value="0">Level_0</option>
+                        <option value="1" selected>Level_1</option>
+                        <option value="2">Level_2</option>
+                        <option value="3">Level_3</option>
+                        <option value="4">Level_4</option>
+                    </select> |
+
+                    <label>Record Status:</label>
+                    <select id="RecStatus" name="RecStatus" style="width: auto; display: inline-block;">
+                        <option value="0" selected>Included</option>
+                        <option value="1">Excluded</option>
+                    </select> |
+
+                    <label>Coupon:</label>
+                    <select id="CouponId" name="CouponId" style="width: auto; display: inline-block;">
+                        <option value="-1" selected>Not Set</option>
+                        <option value="3">15% off P & A Vehicle Purchase</option>
+                        <option value="5">Free Helmet</option>
+                        <option value="6">Gift Card</option>
+                    </select>
+                </div>
+
+                <input type="hidden" id="B50LinkID" name="B50LinkID" value="">
+
+                <div style="margin: 15px 0;">
+                    <label>B50 ProductID Link:</label>
+                    <select id="B50TheoryProductId" name="B50TheoryProductId" style="width: auto; display: inline-block;">
+                        <option value="0" selected>No Ghost Link</option>
+                    </select>
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <strong>B50 Model Type:</strong> (Change in 50 Below)
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <label>Hot Deal</label>
+                    <input type="checkbox" id="HotDeal" name="HotDeal">
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <label>B50LinkID:</label>
+                    <label>Re-Cache Pic:</label>
+                    <input type="checkbox" id="CachePic" name="CachePic">
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <label>B50 Model Name:</label>
+                    <input type="text" id="B50ModelName" name="B50ModelName" style="width: 600px;">
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <label>NAP:</label>
+                    <input type="text" id="NAP" name="NAP" value="0.00" style="width: 300px;">
+                </div>
+
+                <hr>
+
+                <div class="table-container">
+                    <table class="iqTable" id="editor">
+                        <thead>
+                            <tr>
+                                <th>Move</th>
+                                <th>Desc</th>
+                                <th>Item $</th>
+                                <th>Invoice $</th>
+                                <th>Begins</th>
+                                <th>Expires</th>
+                                <th>Type</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="mover">Move<input type="hidden" name="MUItems[0].ItemNumber" value="0"></td>
+                                <td>
+                                    <input type="hidden" name="MUItems[0].MUItemId" value="0" class="boxer">
+                                    <input type="text" name="MUItems[0].ItemDesc" value="" style="width: 300px;">
+                                </td>
+                                <td><input type="text" name="MUItems[0].ItemAmount" class="boxer"></td>
+                                <td><input type="text" name="MUItems[0].ItemInvoice" class="boxer"></td>
+                                <td><input type="text" name="MUItems[0].BeginDate" value="" class="iqDate boxer"></td>
+                                <td><input type="text" name="MUItems[0].EndDate" value="" class="iqDate boxer"></td>
+                                <td>
+                                    <select name="MUItems[0].ItemFlag">
+                                        <option value="8">MfgRebate</option>
+                                        <option value="9">BackRebate</option>
+                                        <option value="64" selected>Discount</option>
+                                        <option value="126">AccessoryInc</option>
+                                        <option value="127">Accessory</option>
+                                        <option value="128">Charge</option>
+                                        <option value="132">Discretion</option>
+                                        <option value="256">TradeIn</option>
+                                    </select>
+                                </td>
+                                <td><a href="#" class="deleteLink">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td class="mover">Move<input type="hidden" name="MUItems[1].ItemNumber" value="1"></td>
+                                <td>
+                                    <input type="hidden" name="MUItems[1].MUItemId" value="0" class="boxer">
+                                    <input type="text" name="MUItems[1].ItemDesc" value="" style="width: 300px;">
+                                </td>
+                                <td><input type="text" name="MUItems[1].ItemAmount" class="boxer"></td>
+                                <td><input type="text" name="MUItems[1].ItemInvoice" class="boxer"></td>
+                                <td><input type="text" name="MUItems[1].BeginDate" value="" class="iqDate boxer"></td>
+                                <td><input type="text" name="MUItems[1].EndDate" value="" class="iqDate boxer"></td>
+                                <td>
+                                    <select name="MUItems[1].ItemFlag">
+                                        <option value="8">MfgRebate</option>
+                                        <option value="9">BackRebate</option>
+                                        <option value="64" selected>Discount</option>
+                                        <option value="126">AccessoryInc</option>
+                                        <option value="127">Accessory</option>
+                                        <option value="128">Charge</option>
+                                        <option value="132">Discretion</option>
+                                        <option value="256">TradeIn</option>
+                                    </select>
+                                </td>
+                                <td><a href="#" class="deleteLink">Delete</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 2: Commission -->
+            <div id="tabs-2">
+                <div style="margin: 20px 0;">
+                    <label>Commission Program:</label>
+                    <select id="CommProgramId" name="CommProgramId" style="width: 300px;">
+                        <option value="1" selected>Default New</option>
+                        <option value="2">Default Used - &lt; $8,999</option>
+                        <option value="15">Default Used - &gt; $8,999</option>
+                        <option value="40">TaoTao Scooter</option>
+                        <option value="48">Yellow Tag</option>
+                    </select>
+                </div>
+
+                <input type="hidden" id="CommItem_MUCommItemId" name="CommItem.MUCommItemId" value="0">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Spec Comm. Desc:</th>
+                            <th>Spec Comm. Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" id="CommItem_ItemDesc" name="CommItem.ItemDesc" value=""></td>
+                            <td><input type="text" id="CommItem_ItemAmount" name="CommItem.ItemAmount" value=""></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab 3: Acc. Packs -->
+            <div id="tabs-3">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pack Name</th>
+                            <th>Brand</th>
+                            <th>MSRP</th>
+                            <th>Sale Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #6c757d; padding: 20px;">No accessory packs available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab 4: Linked Units -->
+            <div id="tabs-4">
+                <div class="table-container">
+                    <table class="linked-units-table">
+                        <tbody>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/70x49" alt=""></td>
+                                <td>SO242470</td>
+                                <td></td>
+                                <td>DF200APX4</td>
+                                <td>2022</td>
+                                <td>DF200APX4</td>
+                                <td>0.00</td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/70x49" alt=""></td>
+                                <td>Y04558U</td>
+                                <td></td>
+                                <td>C3</td>
+                                <td>2007</td>
+                                <td>XF50WS</td>
+                                <td>0.00</td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/70x49" alt=""></td>
+                                <td>SDB08199T</td>
+                                <td></td>
+                                <td>MOVE SWITCH 19 GALV</td>
+                                <td>2024</td>
+                                <td>T2RK</td>
+                                <td>0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 5: Images -->
+            <div id="tabs-5">
+                <div>Use the Cache Pic check box to recache these pictures</div>
+                <div class="image-preview">
+                    <a href="#"><img src="https://via.placeholder.com/200x150" alt="Thumb"></a>
+                    <a href="#"><img src="https://via.placeholder.com/200x150" alt="Med"></a>
+                    <a href="#"><img src="https://via.placeholder.com/200x150" alt="Full"></a>
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize tabs
+            $("#tabs").tabs();
+
+            // Initialize datepicker
+            $(".iqDate").datepicker({
+                dateFormat: 'mm/dd/yy'
+            });
+
+            // Delete link functionality
+            $(".iqTable .deleteLink").on("click", function(e) {
+                e.preventDefault();
+                var tr = $(this).closest('tr');
+                tr.css("background-color", "#FF3700");
+                tr.fadeOut(400, function() {
+                    tr.css("display", "none");
+                    tr.find('[type="hidden"]').first().val(-1);
+                });
+            });
+
+            // Sortable table rows
+            var fixHelperModified = function(e, tr) {
+                var $originals = tr.children();
+                var $helper = tr.clone();
+                $helper.children().each(function(index) {
+                    $(this).width($originals.eq(index).width());
+                });
+                return $helper;
+            };
+
+            var updateIndex = function(e, ui) {
+                $('td.mover', ui.item.parent()).each(function(i) {
+                    $(this).find('[type="hidden"]').val(i);
+                });
+            };
+
+            $(".iqTable tbody").sortable({
+                helper: fixHelperModified,
+                stop: updateIndex,
+                cursor: 'move'
+            });
+
+            // Form submission handler
+            $("#MUEditForm").submit(function(e) {
+                e.preventDefault();
+                
+                // Reindex the items
+                $('input[name$=AccPackMUId]').each(function(i) {
+                    $(this).attr('name', 'AccPacks[' + i + '].AccPackMUId');
+                });
+
+                alert('Form would be submitted. Data validated.');
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

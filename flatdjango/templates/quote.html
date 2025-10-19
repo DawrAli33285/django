@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Quote</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-bottom: 80px;
+        }
+
+        .navbar-brand img {
+            height: 37px;
+            width: auto;
+        }
+
+        .card img {
+            max-height: 300px;
+            object-fit: cover;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        .list-group-item {
+            border: 1px solid rgba(0,0,0,.125);
+        }
+
+        .badge {
+            font-size: 1rem;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+
+        .shadow-lg {
+            box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+        }
+
+        .border-top {
+            border-top: 1px solid #dee2e6!important;
+        }
+
+        .form-check {
+            padding-left: 0;
+            margin: 0 15px;
+        }
+
+        .form-check-input {
+            margin-right: 0.5rem;
+        }
+
+        @media print {
+            .d-print-none {
+                display: none !important;
+            }
+            
+            body {
+                padding-bottom: 0;
+            }
+
+            .fixed-bottom {
+                position: static;
+            }
+        }
+
+        .collapse:not(.show) {
+            display: none;
+        }
+
+        .collapse.show {
+            display: block;
+        }
+
+        .slider {
+            width: 100%;
+        }
+
+        input[type="hidden"].text-right {
+            display: none;
+        }
+
+        .discretion-span {
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .h5 {
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark mb-0 px-0 d-print-none">
+        <div class="container-fluid">
+            <button type="button" id="historyBack" class="btn btn-secondary btn-sm">Cancel</button>
+            <button type="button" id="printPage" class="btn btn-danger btn-sm">Print Quote</button>
+        </div>
+    </nav>
+
+    <nav class="navbar navbar-light bg-light mb-4 p-0">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://via.placeholder.com/200x37?text=FOM+Logo" alt="" width="200" height="37">
+            </a>
+            <span class="navbar-text">
+                7525 E. 88th Place
+                Indianapolis, IN 46256 <strong>(317) 890-9110</strong>
+            </span>
+        </div>
+    </nav>
+
+    <div id="printarea" class="container-fluid">
+        <div class="row align-items-start">
+            <div class="col-sm-5">
+                <div class="card mb-2" style="width: 100%;">
+                    <img src="https://via.placeholder.com/400x300?text=Vehicle+Image" class="d-block w-100" alt="Vehicle">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item fw-bold">2023 Vanderhall CARMEL JEAN GREY</li>
+                        <li class="list-group-item">Model <strong>CARMEL</strong></li>
+                        <li class="list-group-item">VIN <strong>7KGTC2C2XPR004511</strong></li>
+                        <li class="list-group-item">Stock # <strong>VH04511</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <ul class="list-group">
+                    <div class="collapse show" id="collapseMsrpPrice">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">MSRP</div>
+                            </div>
+                            <span class="badge bg-light text-dark">$43,950.00</span>
+                        </li>
+                    </div>
+                    <div class="collapse show" id="collapsePrice">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Price</div>
+                            </div>
+                            <span class="badge bg-light text-dark">$43,950.00</span>
+                        </li>
+                    </div>
+                    <div class="collapse hide" id="collapseDiscretionSection">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <label for="rangeInput" class="form-label fw-bold">Additional Discount</label>
+                                <input type="range" name="rangeInput" class="form-range slider d-print-none" min="0" value="0" max="5000" id="rangeInput" onchange="updateTextInput(this.value);">
+                            </div>
+                            <input class="fw-bold text-right" type="hidden" id="textInput" value="0">
+                            <span id="discretionSpan" class="badge bg-light text-dark discretion-span">$0</span>
+                        </li>
+                    </div>
+                    <div class="collapse show" id="collapseSalePrice">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Sale Price</div>
+                            </div>
+                            <span id="salePriceSpan" class="badge bg-secondary">$45,149.00</span>
+                        </li>
+                    </div>
+                    <div class="collapse show" id="collapseOtdSection">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-normal">Documentation Fee</div>
+                            </div>
+                            <span class="badge bg-light text-dark">$199.00</span>
+                        </li>
+                    </div>
+                    <div class="collapse show" id="collapseOtdSection">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-normal">State Title Application Fee</div>
+                            </div>
+                            <span class="badge bg-light text-dark">$30.00</span>
+                        </li>
+                    </div>
+                    <div class="collapse show" id="collapseOtdSection">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-normal">Set-up</div>
+                            </div>
+                            <span class="badge bg-light text-dark">$0.00</span>
+                        </li>
+                    </div>
+                    <div class="collapse show" id="collapseOtdSection">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-normal">Dealer Destination Fee</div>
+                            </div>
+                            <span class="badge bg-light text-dark">$1,199.00</span>
+                        </li>
+                    </div>
+                    <div class="collapse show" id="collapseOtdSection">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-normal">State Tire Tax</div>
+                            </div>
+                            <span class="badge bg-light text-dark">$1.00</span>
+                        </li>
+                    </div>
+                    <div class="collapse show" id="collapseOtdSection">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-normal">Indiana Sales Tax ($45,149.00 @ 7%)</div>
+                            </div>
+                            <span class="badge bg-light text-dark">$3,160.43</span>
+                        </li>
+                    </div>
+                    <div class="collapse show" id="collapseOtdPrice">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold h5">Final Price</div>
+                            </div>
+                            <h5><span id="otdPriceSpan" class="badge bg-success">$48,539.43</span></h5>
+                        </li>
+                    </div>
+                </ul>
+                <p class="small pt-2 text-right">Quote Price Expires <span class="badge bg-info">October 21</span></p>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar fixed-bottom navbar-light bg-light shadow-lg d-print-none border-top">
+        <div class="container-fluid">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="msrpCheckChecked" data-bs-toggle="collapse" data-bs-target="#collapseMsrpPrice" checked>
+                <label class="form-check-label" for="msrpCheckChecked">
+                    MSRP
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="priceCheckChecked" data-bs-toggle="collapse" data-bs-target="#collapsePrice" checked>
+                <label class="form-check-label" for="priceCheckChecked">
+                    Price
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="salePriceCheckChecked" data-bs-toggle="collapse" data-bs-target="#collapseSalePrice" checked>
+                <label class="form-check-label" for="salePriceCheckChecked">
+                    Sale Price
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="otdItemsCheckChecked" data-bs-toggle="collapse" data-bs-target="#collapseOtdSection" checked>
+                <label class="form-check-label" for="otdItemsCheckChecked">
+                    Fees
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="otdPriceCheckChecked" data-bs-toggle="collapse" data-bs-target="#collapseOtdPrice" checked>
+                <label class="form-check-label" for="otdPriceCheckChecked">
+                    OTD Price
+                </label>
+            </div>
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script>
+        // Discretion Range Slider
+        function updateTextInput(val) {
+            document.getElementById('textInput').value = val;
+            var discretionValue = parseFloat(val);
+            var discretionAmount = '-$' + numeral(discretionValue).format('0,0.00');
+            var sPrice = 45149.00;
+            var InTax = (sPrice - discretionValue) * 0.07;
+            var salePrice = numeral(sPrice - discretionValue).format('0,0.00');
+            var fees = 199.00 + 30.00 + 0.00 + 1199.00 + 1.00; // Sum of all fees
+            var otd = (sPrice - discretionValue) + fees + InTax;
+            var otdPriceF = numeral(otd).format('0,0.00');
+            
+            document.getElementById("discretionSpan").innerHTML = discretionAmount;
+            document.getElementById("salePriceSpan").innerHTML = '$' + salePrice;
+            document.getElementById("otdPriceSpan").innerHTML = '$' + otdPriceF;
+            
+            console.log('Discretion:', discretionAmount, 'Sale Price:', salePrice, 'OTD:', otdPriceF, 'Tax:', InTax.toFixed(2));
+        }
+
+        // Back button
+        document.getElementById('historyBack').addEventListener('click', () => {
+            history.back();
+        });
+
+        // Print button
+        document.getElementById('printPage').addEventListener('click', () => {
+            window.print();
+        });
+
+        // Initialize Bootstrap collapse functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle multiple elements with same data-bs-target
+            const otdSectionCheckboxes = document.querySelectorAll('[data-bs-target="#collapseOtdSection"]');
+            const otdSectionElements = document.querySelectorAll('#collapseOtdSection');
+            
+            otdSectionCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    otdSectionElements.forEach(el => {
+                        if (this.checked) {
+                            el.classList.add('show');
+                        } else {
+                            el.classList.remove('show');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

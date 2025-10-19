@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sale Program Editor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 80px;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+
+        .navbar-brand img {
+            height: 24px;
+        }
+
+        #editor tbody tr:nth-child(even) {
+            background-color: #EBE9E9;
+        }
+
+        .coler {
+            text-align: right;
+            padding-right: 10px;
+            font-weight: 500;
+        }
+
+        #majorUnits tbody td {
+            padding: 4px;
+        }
+
+        #mainer {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        #mainer td {
+            padding: 8px;
+        }
+
+        #editor {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+
+        #editor thead th {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        #editor tbody td {
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .mover {
+            cursor: move;
+            color: #007bff;
+        }
+
+        .deleteLink {
+            color: #dc3545;
+            text-decoration: none;
+        }
+
+        .deleteLink:hover {
+            text-decoration: underline;
+        }
+
+        .ui-tabs {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+
+        .ui-tabs-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            display: flex;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .ui-tabs-nav li {
+            margin-right: 5px;
+        }
+
+        .ui-tabs-nav a {
+            display: block;
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-bottom: none;
+            text-decoration: none;
+            color: #495057;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .ui-tabs-nav li.ui-tabs-active a {
+            background: white;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .ui-tabs-panel {
+            padding: 20px 0;
+        }
+
+        #majorUnits {
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        #majorUnits thead th {
+            background-color: #343a40;
+            color: white;
+            padding: 8px;
+        }
+
+        #majorUnits tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+
+        #majorUnits img {
+            max-width: 70px;
+            max-height: 49px;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 0.2em solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spinner-border 0.75s linear infinite;
+        }
+
+        @keyframes spinner-border {
+            to { transform: rotate(360deg); }
+        }
+
+        .ui-sortable-helper {
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+        <a class="navbar-brand" href="/portal/admin">
+            <span style="color: #fff; font-weight: bold;">FlatOut Motorsports</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        Major Units
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Major Units</a>
+                        <a class="dropdown-item" href="#">Major Units Grid</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        Sale Programs
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Sale Programs</a>
+                        <a class="dropdown-item" href="#">Coupons</a>
+                    </div>
+                </li>
+            </ul>
+            <span class="navbar-text">
+                <i class="fa fa-user-circle"></i> ewebdata 
+                <a class="btn btn-danger btn-sm ml-2" href="#">Logout</a>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <h2 class="mb-4">Sale Program</h2>
+
+        <form id="saleProgramForm">
+            <div id="tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-active"><a href="#tabs-1">Main</a></li>
+                    <li><a href="#tabs-2">Linked Units (60)</a></li>
+                </ul>
+
+                <!-- Main Tab -->
+                <div id="tabs-1" class="ui-tabs-panel">
+                    <input type="hidden" id="SaleProgramId" name="SaleProgramId" value="25">
+
+                    <table id="mainer">
+                        <tbody>
+                            <tr>
+                                <td class="coler">Program Name:</td>
+                                <td><input type="text" name="ProgramName" value="DNV $899 Freight" style="width: 300px;"></td>
+                                <td class="coler">Mfg:</td>
+                                <td>
+                                    <select name="Mfg">
+                                        <option value="-1">All</option>
+                                        <option value="SEA DOO">SEA DOO</option>
+                                        <option value="CAN-AM">CAN-AM</option>
+                                        <option value="YAMAHA">YAMAHA</option>
+                                        <option value="KAWASAKI">KAWASAKI</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="coler">Begin Date:</td>
+                                <td><input type="text" class="datepicker" name="BeginDate" value="01/01/2024"></td>
+                                <td class="coler">Expire Date:</td>
+                                <td><input type="text" class="datepicker" name="ExpireDate" value="01/01/2026"></td>
+                            </tr>
+                            <tr>
+                                <td class="coler">New/Used:</td>
+                                <td>
+                                    <select name="NewUsed">
+                                        <option value="-1">Not Set</option>
+                                        <option value="0" selected>New</option>
+                                        <option value="1">Used</option>
+                                    </select>
+                                </td>
+                                <td class="coler">Program Notes:</td>
+                                <td><textarea name="ProgramNotes" rows="2" cols="30">The typical new sale program.</textarea></td>
+                            </tr>
+                            <tr>
+                                <td class="coler">Price To Show:</td>
+                                <td>
+                                    <select name="PriceToShow">
+                                        <option value="0" selected>SalePrice</option>
+                                        <option value="1">SalePriceMinusDiscretion</option>
+                                        <option value="2">OTD</option>
+                                        <option value="3">OTDMinusDiscretion</option>
+                                    </select>
+                                </td>
+                                <td class="coler">Price Vis Level:</td>
+                                <td>
+                                    <select name="PVL">
+                                        <option value="1">Must_Ask</option>
+                                        <option value="2">MSRP</option>
+                                        <option value="4" selected>MSRP_MFGCInc_MFGDInc</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Program Items Table -->
+                    <table id="editor">
+                        <thead>
+                            <tr>
+                                <th>Move</th>
+                                <th>Desc</th>
+                                <th>Amount</th>
+                                <th>Begin</th>
+                                <th>Expire</th>
+                                <th>Type</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sortableTable">
+                            <tr>
+                                <td class="mover">Move<input type="hidden" name="ProgItems[0].ItemNumber" value="0"></td>
+                                <td><input type="text" name="ProgItems[0].ItemDesc" value="Dealer Destination Fee" style="width: 200px;"></td>
+                                <td><input type="text" name="ProgItems[0].ItemAmount" value="1199.00" style="text-align: right;"></td>
+                                <td><input type="text" class="datepicker" name="ProgItems[0].BeginDate" value=""></td>
+                                <td><input type="text" class="datepicker" name="ProgItems[0].EndDate" value=""></td>
+                                <td>
+                                    <select name="ProgItems[0].ItemFlag">
+                                        <option value="8">MfgRebate</option>
+                                        <option value="32">Fee</option>
+                                        <option value="64">Discount</option>
+                                        <option value="128">Charge</option>
+                                        <option value="129" selected>Freight</option>
+                                    </select>
+                                </td>
+                                <td><a href="#" class="deleteLink">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td class="mover">Move<input type="hidden" name="ProgItems[1].ItemNumber" value="1"></td>
+                                <td><input type="text" name="ProgItems[1].ItemDesc" value="Documentation Fee" style="width: 200px;"></td>
+                                <td><input type="text" name="ProgItems[1].ItemAmount" value="199.00" style="text-align: right;"></td>
+                                <td><input type="text" class="datepicker" name="ProgItems[1].BeginDate" value=""></td>
+                                <td><input type="text" class="datepicker" name="ProgItems[1].EndDate" value=""></td>
+                                <td>
+                                    <select name="ProgItems[1].ItemFlag">
+                                        <option value="8">MfgRebate</option>
+                                        <option value="32" selected>Fee</option>
+                                        <option value="64">Discount</option>
+                                        <option value="128">Charge</option>
+                                    </select>
+                                </td>
+                                <td><a href="#" class="deleteLink">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td class="mover">Move<input type="hidden" name="ProgItems[2].ItemNumber" value="2"></td>
+                                <td><input type="text" name="ProgItems[2].ItemDesc" value="State Title Application Fee" style="width: 200px;"></td>
+                                <td><input type="text" name="ProgItems[2].ItemAmount" value="30.00" style="text-align: right;"></td>
+                                <td><input type="text" class="datepicker" name="ProgItems[2].BeginDate" value=""></td>
+                                <td><input type="text" class="datepicker" name="ProgItems[2].EndDate" value=""></td>
+                                <td>
+                                    <select name="ProgItems[2].ItemFlag">
+                                        <option value="8">MfgRebate</option>
+                                        <option value="32" selected>Fee</option>
+                                        <option value="64">Discount</option>
+                                    </select>
+                                </td>
+                                <td><a href="#" class="deleteLink">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td class="mover">Move<input type="hidden" name="ProgItems[3].ItemNumber" value="3"></td>
+                                <td><input type="text" name="ProgItems[3].ItemDesc" value="Indiana Sales Tax" style="width: 200px;"></td>
+                                <td><input type="text" name="ProgItems[3].ItemAmount" value="0.07" style="text-align: right;"></td>
+                                <td><input type="text" class="datepicker" name="ProgItems[3].BeginDate" value=""></td>
+                                <td><input type="text" class="datepicker" name="ProgItems[3].EndDate" value=""></td>
+                                <td>
+                                    <select name="ProgItems[3].ItemFlag">
+                                        <option value="16" selected>Tax</option>
+                                        <option value="17">TireTax</option>
+                                        <option value="32">Fee</option>
+                                    </select>
+                                </td>
+                                <td><a href="#" class="deleteLink">Delete</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Linked Units Tab -->
+                <div id="tabs-2" class="ui-tabs-panel" style="display: none;">
+                    <table id="majorUnits" class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Stock #</th>
+                                <th>Description</th>
+                                <th>Mfg</th>
+                                <th>Year</th>
+                                <th>Sale Price</th>
+                                <th>Price</th>
+                                <th>Expires</th>
+                                <th>Gross Profit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/70x49" alt="Unit"></td>
+                                <td>SKD00377U</td>
+                                <td>MXZ Xrs COMPETITION 8TR 137 1.25 HUB</td>
+                                <td>SKI DOO</td>
+                                <td>2025</td>
+                                <td>$23,698</td>
+                                <td>$22,499</td>
+                                <td>01/01/2026</td>
+                                <td><a href="#">$3,519.00</a></td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/70x49" alt="Unit"></td>
+                                <td>BRP01177</td>
+                                <td>DEFENDER HD11 CAB MAX LONE STAR</td>
+                                <td>CAN-AM</td>
+                                <td>2026</td>
+                                <td>$40,898</td>
+                                <td>$39,699</td>
+                                <td>01/01/2026</td>
+                                <td><a href="#">$3,108.62</a></td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/70x49" alt="Unit"></td>
+                                <td>SD-66TF</td>
+                                <td>SPARK 3UP TRIXX AUDIO</td>
+                                <td>SEA DOO</td>
+                                <td>2026</td>
+                                <td>$11,998</td>
+                                <td>$10,799</td>
+                                <td>01/01/2026</td>
+                                <td><a href="#">$1,679.00</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Save Button -->
+                <div class="mt-4">
+                    <button id="saveSaleProgramBtn" type="button" class="btn btn-primary btn-lg">
+                        Save Sale Program
+                    </button>
+                    <div id="saveSpinner" class="d-none">
+                        <div class="d-flex align-items-center pl-3">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <span class="pl-3">Saving...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(function() {
+            // Initialize datepickers
+            $(".datepicker").datepicker({
+                dateFormat: 'mm/dd/yy'
+            });
+
+            // Tab functionality
+            $("#tabs ul.ui-tabs-nav a").on("click", function(e) {
+                e.preventDefault();
+                var target = $(this).attr("href");
+                
+                $("#tabs .ui-tabs-panel").hide();
+                $(target).show();
+                
+                $("#tabs ul.ui-tabs-nav li").removeClass("ui-tabs-active");
+                $(this).parent().addClass("ui-tabs-active");
+            });
+
+            // Delete functionality
+            $(".deleteLink").on("click", function(e) {
+                e.preventDefault();
+                var tr = $(this).closest('tr');
+                tr.css("background-color", "#FF3700");
+                tr.fadeOut(400, function() {
+                    tr.find('[type="hidden"]').first().val(-1);
+                });
+            });
+
+            // Save button
+            $("#saveSaleProgramBtn").on("click", function() {
+                $(this).addClass('d-none');
+                $("#saveSpinner").removeClass('d-none');
+                
+                setTimeout(function() {
+                    alert("Sale Program Saved Successfully!");
+                    $("#saveSaleProgramBtn").removeClass('d-none');
+                    $("#saveSpinner").addClass('d-none');
+                }, 2000);
+            });
+
+            // Sortable rows
+            $("#sortableTable").sortable({
+                helper: function(e, tr) {
+                    var originals = tr.children();
+                    var helper = tr.clone();
+                    helper.children().each(function(index) {
+                        $(this).width(originals.eq(index).width());
+                    });
+                    return helper;
+                },
+                stop: function(e, ui) {
+                    $('#sortableTable tr').each(function(i) {
+                        $(this).find('input[type="hidden"]').val(i);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

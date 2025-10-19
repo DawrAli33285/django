@@ -162,6 +162,20 @@ def quotes(request):
     """Display quotes page"""
     return render(request, 'quotes.html')
 
+def quote_view(request):
+    """Display quote view page"""
+    return render(request, 'quote.html')
+
+def portal_quote(request):
+    """Display portal quote page"""
+    return render(request, 'portalquote.html')
+
+def sale_program_edit(request, program_id):
+    """Edit sale program by ID"""
+    # You can later use program_id to fetch a record from the database.
+    context = {'program_id': program_id}
+    return render(request, 'saleprogramedit.html', context)
+
 def sale_programs(request):
     """Display sale programs page"""
     return render(request, 'saleprograms.html')

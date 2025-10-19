@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management - Unit Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tabs {
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab-list {
+            list-style: none;
+            display: flex;
+            gap: 5px;
+        }
+
+        .tab-list li {
+            cursor: pointer;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            transition: background 0.3s;
+        }
+
+        .tab-list li:hover {
+            background: #e0e0e0;
+        }
+
+        .tab-list li.active {
+            background: white;
+            border-bottom: 2px solid white;
+            margin-bottom: -2px;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .info-table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .info-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .info-table .boldy {
+            font-weight: bold;
+            background: #f8f8f8;
+            width: 150px;
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        label {
+            margin: 0 10px 0 0;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="checkbox"] {
+            margin: 0 5px;
+        }
+
+        .editor-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .editor-table th {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .editor-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .editor-table input[type="text"] {
+            width: 100%;
+        }
+
+        .mover {
+            cursor: move;
+            background: #f0f0f0;
+            user-select: none;
+        }
+
+        .deleteLink {
+            color: red;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .deleteLink:hover {
+            text-decoration: underline;
+        }
+
+        input[type="submit"] {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        input[type="submit"]:hover {
+            background: #45a049;
+        }
+
+        .linked-units-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .linked-units-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .linked-units-table img {
+            max-width: 70px;
+            height: auto;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        .validation-error {
+            border: 1px solid red;
+            padding: 10px;
+            color: red;
+            display: none;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="validation-custom-error" class="validation-error"></div>
+        
+        <div class="tabs">
+            <ul class="tab-list">
+                <li class="active" data-tab="main">Main</li>
+                <li data-tab="commission">Commission</li>
+                <li data-tab="acc-packs">Acc. Packs</li>
+                <li data-tab="linked-units">Linked Units</li>
+                <li data-tab="images">Images</li>
+            </ul>
+        </div>
+
+        <form id="MUEditForm">
+            <!-- Main Tab -->
+            <div class="tab-content active" id="main">
+                <table class="info-table">
+                    <tr>
+                        <td class="boldy">MFg</td>
+                        <td>Vanderhall</td>
+                        <td class="boldy">Stock #</td>
+                        <td>VH04511</td>
+                    </tr>
+                    <tr>
+                        <td class="boldy">Model Name</td>
+                        <td>CARMEL</td>
+                        <td class="boldy">$ Expire Date</td>
+                        <td>01/01/2026</td>
+                    </tr>
+                    <tr>
+                        <td class="boldy">LS</td>
+                        <td>C=10/18/2025&nbsp;M=10/18/2025</td>
+                        <td class="boldy">Year</td>
+                        <td>2023</td>
+                    </tr>
+                    <tr>
+                        <td class="boldy">Invoice</td>
+                        <td>40930.91</td>
+                        <td class="boldy">MSRP Unit</td>
+                        <td>43950.00</td>
+                    </tr>
+                    <tr>
+                        <td class="boldy">Model Code</td>
+                        <td>CARMEL</td>
+                        <td class="boldy">Freight</td>
+                        <td>0.00</td>
+                    </tr>
+                    <tr>
+                        <td class="boldy">Color</td>
+                        <td>JEAN GREY</td>
+                        <td class="boldy"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="boldy">Profit</td>
+                        <td>4218.09</td>
+                        <td class="boldy">Sale Price</td>
+                        <td>45149.00</td>
+                    </tr>
+                    <tr>
+                        <td class="boldy">VIN</td>
+                        <td>7KGTC2C2XPR004511</td>
+                        <td class="boldy">UI mod</td>
+                        <td>10/18/2025 8:36:59 AM</td>
+                    </tr>
+                </table>
+
+                <div class="form-group">
+                    <label><input type="checkbox" id="AutoRV"> AutoRV</label> |
+                    <label><input type="checkbox" id="YellowTag"> Yellow Tag</label> |
+                    <label><input type="checkbox" id="Mapped" checked> MAP</label> |
+                    
+                    <select id="InvStatus">
+                        <option value="0" selected>InStock</option>
+                        <option value="1">Sold</option>
+                        <option value="2">Pending</option>
+                    </select> |
+
+                    Sale Program: 
+                    <select id="SaleProgramId">
+                        <option value="842">Default New Boat $2,500</option>
+                        <option value="25" selected>DNV $899 Freight</option>
+                        <option value="1291">Vanderhall Carmel</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    Quote: 
+                    <select id="QuoteLevel">
+                        <option value="0">Level_0</option>
+                        <option value="1" selected>Level_1</option>
+                        <option value="2">Level_2</option>
+                        <option value="3">Level_3</option>
+                        <option value="4">Level_4</option>
+                    </select> | 
+
+                    Record Status: 
+                    <select id="RecStatus">
+                        <option value="0" selected>Included</option>
+                        <option value="1">Excluded</option>
+                    </select>
+
+                    Coupon: 
+                    <select id="CouponId">
+                        <option value="3">15% off P & A Vehicle Purchase</option>
+                        <option value="5">Free Helmet</option>
+                        <option value="-1" selected>Not Set</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Hot Deal <input type="checkbox" id="HotDeal"></label>
+                </div>
+
+                <div class="form-group">
+                    <label>Re-Cache Pic: <input type="checkbox" id="CachePic"></label>
+                </div>
+
+                <div class="form-group">
+                    B50 Model Name: <input type="text" id="B50ModelName" style="width:600px;">
+                </div>
+
+                <div class="form-group">
+                    NAP: <input type="number" id="NAP" value="0.00" step="0.01" style="width:300px;">
+                </div>
+
+                <hr>
+
+                <table class="editor-table" id="editor">
+                    <thead>
+                        <tr>
+                            <th>Move</th>
+                            <th>Desc</th>
+                            <th>Item $</th>
+                            <th>Invoice $</th>
+                            <th>Begins</th>
+                            <th>Expires</th>
+                            <th>Type</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="editorBody">
+                        <tr>
+                            <td class="mover">Move<input type="hidden" value="0"></td>
+                            <td><input type="text" style="width: 300px;"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text" class="date-picker"></td>
+                            <td><input type="text" class="date-picker"></td>
+                            <td>
+                                <select>
+                                    <option value="8">MfgRebate</option>
+                                    <option value="64" selected>Discount</option>
+                                    <option value="127">Accessory</option>
+                                    <option value="128">Charge</option>
+                                </select>
+                            </td>
+                            <td><a href="#" class="deleteLink">Delete</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Commission Tab -->
+            <div class="tab-content" id="commission">
+                <div class="form-group">
+                    Commission Program: 
+                    <select id="CommProgramId">
+                        <option value="1" selected>Default New</option>
+                        <option value="2">Default Used - &lt; $8,999</option>
+                        <option value="15">Default Used - &gt; $8,999</option>
+                        <option value="40">TaoTao Scooter</option>
+                        <option value="48">Yellow Tag</option>
+                    </select>
+                </div>
+
+                <table class="info-table">
+                    <thead>
+                        <tr>
+                            <th>Spec Comm. Desc:</th>
+                            <th>Spec Comm. Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" id="CommItemDesc"></td>
+                            <td><input type="number" id="CommItemAmount" step="0.01"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Acc. Packs Tab -->
+            <div class="tab-content" id="acc-packs">
+                <table class="info-table">
+                    <thead>
+                        <tr>
+                            <th>Pack Name</th>
+                            <th>Brand</th>
+                            <th>MSRP</th>
+                            <th>Sale Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 20px;">No accessory packages available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Linked Units Tab -->
+            <div class="tab-content" id="linked-units">
+                <div style="max-height: 500px; overflow-y: auto;">
+                    <table class="linked-units-table">
+                        <tbody>
+                            <tr>
+                                <td><div style="width:70px;height:49px;background:#ddd;"></div></td>
+                                <td>SO242470</td>
+                                <td>DF200APX4</td>
+                                <td>2022</td>
+                                <td>0.00</td>
+                            </tr>
+                            <tr>
+                                <td><div style="width:70px;height:49px;background:#ddd;"></div></td>
+                                <td>Y04558U</td>
+                                <td>C3</td>
+                                <td>2007</td>
+                                <td>0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Images Tab -->
+            <div class="tab-content" id="images">
+                <div>Use the Cache Pic check box to recache these pictures</div>
+                <div style="margin-top: 20px;">
+                    <div style="display: inline-block; margin: 10px; text-align: center;">
+                        <div style="width: 100px; height: 75px; background: #ddd; margin-bottom: 5px;"></div>
+                        <small>Thumbnail</small>
+                    </div>
+                    <div style="display: inline-block; margin: 10px; text-align: center;">
+                        <div style="width: 150px; height: 112px; background: #ddd; margin-bottom: 5px;"></div>
+                        <small>Medium</small>
+                    </div>
+                    <div style="display: inline-block; margin: 10px; text-align: center;">
+                        <div style="width: 200px; height: 150px; background: #ddd; margin-bottom: 5px;"></div>
+                        <small>Full Size</small>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" value="Save Changes">
+        </form>
+    </div>
+
+    <script>
+        // Tab switching
+        const tabButtons = document.querySelectorAll('.tab-list li');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTab = btn.dataset.tab;
+                
+                tabButtons.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        // Delete link functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('deleteLink')) {
+                e.preventDefault();
+                const row = e.target.closest('tr');
+                row.style.backgroundColor = '#FF3700';
+                setTimeout(() => {
+                    row.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // Form submission
+        document.getElementById('MUEditForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Form submitted! (This is a demo - no actual submission occurs)');
+        });
+
+        // Drag and drop for table rows (basic implementation)
+        let draggedRow = null;
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.classList.contains('mover')) {
+                draggedRow = e.target.closest('tr');
+                e.dataTransfer.effectAllowed = 'move';
+            }
+        });
+
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        });
+
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const targetRow = e.target.closest('tr');
+            if (targetRow && draggedRow && targetRow !== draggedRow) {
+                const tbody = targetRow.parentNode;
+                tbody.insertBefore(draggedRow, targetRow);
+                updateRowIndexes();
+            }
+        });
+
+        function updateRowIndexes() {
+            const rows = document.querySelectorAll('#editorBody tr');
+            rows.forEach((row, i) => {
+                const hiddenInput = row.querySelector('input[type="hidden"]');
+                if (hiddenInput) hiddenInput.value = i;
+            });
+        }
+    </script>
+</body>
+</html>
